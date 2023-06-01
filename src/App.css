@@ -9,6 +9,19 @@
     padding: 20px;
 }
 
+#user-table-header {
+    border-top: 1px solid #dee2e6;
+    height: 20px;
+}
+
+#page-not-found-header {
+    font-size: 250px;
+}
+
+#user-table {
+    margin-top: 10px;
+}
+
 @media screen and (max-width: 1200px) {
     #login-form {
         width: 50%;
