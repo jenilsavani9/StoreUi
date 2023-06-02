@@ -7,8 +7,6 @@ import Login from "./Components/Login";
 import EmailValidation from "./Components/EmailValidation";
 import PageNotFound from "./Components/PageNotFound";
 
-
-
 function App() {
     return (
         <div className="App">

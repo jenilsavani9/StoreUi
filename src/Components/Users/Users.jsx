@@ -94,11 +94,11 @@ function Users() {
 
     const checkTokenExpirationMiddleware = () => {
         const token = localStorage.getItem("token");
-        if (!token && jwtDecode(token).exp < Date.now() / 1000 ) {
+        if (!token && jwtDecode(token).exp < Date.now() / 1000) {
             localStorage.clear();
             nav('/login');
         }
-        if(!token || jwtDecode(token).role != "admin") {
+        if (!token || jwtDecode(token).role != "admin") {
             nav('/404');
         }
     };
@@ -171,7 +171,7 @@ function Users() {
                                                     Looks good!
                                                 </div>
                                                 <div className="invalid-feedback">
-                                                    Please select a valid state.
+                                                    First Name is not valid.
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
@@ -180,6 +180,9 @@ function Users() {
                                                 <div className="valid-feedback">
                                                     Looks good!
                                                 </div>
+                                                <div className="invalid-feedback">
+                                                    Last Name is not valid.
+                                                </div>
                                             </div>
                                             <div className="col-md-12">
                                                 <label htmlFor="validationCustom03" className="form-label">Email</label>
@@ -187,12 +190,18 @@ function Users() {
                                                 <div className="valid-feedback">
                                                     Looks good!
                                                 </div>
+                                                <div className="invalid-feedback">
+                                                    Email is not valid.
+                                                </div>
                                             </div>
                                             <div className="col-md-12">
                                                 <label htmlFor="validationCustom04" className="form-label">Password</label>
                                                 <input type="password" className="form-control" id="validationCustom04" minlength="5" value={password} onChange={(e) => setPassword(e.target.value)} required />
                                                 <div className="valid-feedback">
                                                     Looks good!
+                                                </div>
+                                                <div className="invalid-feedback">
+                                                    Password is not valid.
                                                 </div>
                                             </div>
                                             <div className="col-12 d-flex justify-content-end">
@@ -235,7 +244,7 @@ function Users() {
                                             </h5>
                                         </td>
                                         <td>{u.roles}</td>
-                                        <td>{u.status != "deactive" ? <button type="button" class="btn btn-outline-danger btn-sm" value={u.userId} onClick={DeleteUser}>Delete</button> : ""}</td>
+                                        <td>{(u.status != "deactive" && u.roles != "admin") ? <button type="button" class="btn btn-outline-danger btn-sm" value={u.userId} onClick={DeleteUser}>Delete</button> : ""}</td>
                                     </tr>)
                                 })}
                             </tbody>
@@ -252,7 +261,7 @@ function Users() {
                                     {Array.from({ length: (userCount / 10) + 1 }, (_, index) => index + 1).map(i => {
                                         return <li class="page-item me-2 "><a class="page-link btn text-dark" onClick={() => setPageIndex(i - 1)}>{i}</a></li>
                                     })}
-                                
+
                                     <li class="page-item ">
                                         <a class="page-link btn text-dark" onClick={() => { (pageIndex + 1) > userCount / 10 ? setPageIndex(pageIndex) : setPageIndex(pageIndex + 1) }} aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>

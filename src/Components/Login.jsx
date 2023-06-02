@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import swal from 'sweetalert2';
+import { useDeviceSelectors } from 'react-device-detect';
 
 function Login() {
+
+    // for getting device information use : react-device-detect
+    const [selectors, data] = useDeviceSelectors(window.navigator.userAgent);
+
 
     const nav = useNavigate();
     const [email, setEmail] = useState("");
@@ -21,14 +26,37 @@ function Login() {
 
     const SubmitLoginForm = async (event) => {
         event.preventDefault();
-        
+        const { osName, browserName } = selectors;
         try {
+            var LastLogin = {}
+            try {
+                const DeviceInfo = await axios({
+                    method: 'get',
+                    url: 'https://geolocation-db.com/json/',
+                })
+                const date = new Date();
+                LastLogin = {
+                    // "osName": osName,
+                    // "browserName": browserName,
+                    "IPv4": DeviceInfo.data.IPv4,
+                    "date": date
+                }
+            } catch (error) {
+                // swal.fire({
+                //     title: 'Error!',
+                //     text: LastLogin,
+                //     icon: 'error',
+                //     confirmButtonText: 'Cool'
+                //   })
+            }
+
             const response = await axios({
                 method: 'post',
                 url: 'https://localhost:44372/api/Login',
                 data: {
                     emailId: email,
-                    password: password
+                    password: password,
+                    LastLogin: JSON.stringify(LastLogin)
                 }
             })
             localStorage.setItem('token', response.data)
@@ -36,12 +64,12 @@ function Login() {
         } catch (error) {
             swal.fire({
                 title: 'Error!',
-                text: error.response.data,
+                text: "Some Error Occure",
                 icon: 'error',
                 confirmButtonText: 'Cool'
-              })
+            })
         }
-        
+
 
     }
 

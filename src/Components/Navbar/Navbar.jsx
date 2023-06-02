@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, json, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode"
 
 function Navbar() {
@@ -9,6 +9,7 @@ function Navbar() {
 
     const [FirstName, setFirstName] = useState("");
     const [LastName, setLastName] = useState("");
+    // const [lastLogin, setLastLogin] = useState();
     const [admin, setAdmin] = useState(false)
 
     useEffect(() => {
@@ -18,6 +19,7 @@ function Navbar() {
 
             setFirstName(decoded.FirstName);
             setLastName(decoded.LastName);
+            // setLastLogin(JSON.parse(decoded.lastLogin));
             if(decoded.role == "admin") {
                 setAdmin(true)
             }
