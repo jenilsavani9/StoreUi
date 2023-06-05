@@ -5,12 +5,16 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import swal from 'sweetalert2';
 import { useDeviceSelectors } from 'react-device-detect';
+import jwt_decode from "jwt-decode";
+import { useStateValue } from './Context/StateProvider';
+
 
 function Login() {
 
     // for getting device information use : react-device-detect
     const [selectors, data] = useDeviceSelectors(window.navigator.userAgent);
 
+    const [{user}, dispatch] = useStateValue();
 
     const nav = useNavigate();
     const [email, setEmail] = useState("");
@@ -22,6 +26,20 @@ function Login() {
 
     const changeInputEmail = (event) => {
         setEmail(event.target.value)
+    }
+
+    async function SetUserInContext() {
+        if (localStorage.getItem('token') != null) {
+            dispatch({
+              type: 'SET_USER',
+              user: await jwt_decode(localStorage.getItem('token'))
+            })
+          } else {
+            await dispatch({
+              type: 'SET_USER',
+              user: null
+            })
+          }
     }
 
     const SubmitLoginForm = async (event) => {
@@ -60,6 +78,7 @@ function Login() {
                 }
             })
             localStorage.setItem('token', response.data)
+            SetUserInContext();
             nav('/');
         } catch (error) {
             swal.fire({

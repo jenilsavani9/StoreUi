@@ -40,46 +40,49 @@ function ResetPassword(sendEmailToResetPass) {
                 icon: 'error',
                 confirmButtonText: 'Cool'
             })
-        }
-        try {
-            const loginResponse = await axios({
-                method: 'post',
-                url: 'https://localhost:44372/api/Login',
-                data: {
-                    emailId: sendEmailToResetPass.email,
-                    password: tempPass
+        } 
+        else {
+            try {
+                const loginResponse = await axios({
+                    method: 'post',
+                    url: 'https://localhost:44372/api/Login',
+                    data: {
+                        emailId: sendEmailToResetPass.email,
+                        password: tempPass
+                    }
+                })
+                const response = await axios({
+                    method: 'post',
+                    headers: { Authorization: `Bearer ${loginResponse.data}` },
+                    url: `https://localhost:44372/api/Login/resetpassword?email=${sendEmailToResetPass.email}&password=${tempPass}&newPassword=${newPass}`
+                })
+                if(response.data.status == true) {
+                    swal.fire({
+                        title: 'Success!',
+                        text: "Password changed successfully",
+                        icon: 'success',
+                        confirmButtonText: 'Cool'
+                    }).then(() => {
+                        nav('/login');
+                    })
+                } else {
+                    swal.fire({
+                        title: 'Error!',
+                        text: "Some Error Occur",
+                        icon: 'error',
+                        confirmButtonText: 'Cool'
+                    })
                 }
-            })
-            const response = await axios({
-                method: 'post',
-                headers: { Authorization: `Bearer ${loginResponse.data}` },
-                url: `https://localhost:44372/api/Login/resetpassword?email=${sendEmailToResetPass.email}&password=${tempPass}&newPassword=${newPass}`
-            })
-            if(response.data.status == true) {
+            } catch (error) {
                 swal.fire({
-                    title: 'Success!',
-                    text: "Password changed successfully",
-                    icon: 'success',
-                    confirmButtonText: 'Cool'
-                }).then(() => {
-                    nav('/login');
-                })
-            } else {
-                swal.fire({
-                    title: 'Error!',
-                    text: "Some Error Occur",
-                    icon: 'error',
-                    confirmButtonText: 'Cool'
-                })
+                        title: 'Error!',
+                        text: "Some Error Occur",
+                        icon: 'error',
+                        confirmButtonText: 'Cool'
+                    })
             }
-        } catch (error) {
-            swal.fire({
-                    title: 'Error!',
-                    text: "Some Error Occur",
-                    icon: 'error',
-                    confirmButtonText: 'Cool'
-                })
         }
+        
     }
 
     return (

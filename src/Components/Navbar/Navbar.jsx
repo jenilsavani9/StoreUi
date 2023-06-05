@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, json, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode"
+import { useStateValue } from "../Context/StateProvider";
 
 function Navbar() {
 
     var nav = useNavigate();
+
+    const [{ user }] = useStateValue();
     const [token, setToken] = useState(localStorage.getItem('token'))
 
     const [FirstName, setFirstName] = useState("");
@@ -17,10 +20,10 @@ function Navbar() {
             setToken(localStorage.getItem('token'))
             const decoded = jwt_decode(token);
 
-            setFirstName(decoded.FirstName);
-            setLastName(decoded.LastName);
+            setFirstName(user.FirstName);
+            setLastName(user.LastName);
             // setLastLogin(JSON.parse(decoded.lastLogin));
-            if(decoded.role == "admin") {
+            if(user.role == "admin") {
                 setAdmin(true)
             }
         } catch (error) {
