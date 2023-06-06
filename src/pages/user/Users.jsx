@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from "../Navbar/Navbar";
+import Navbar from "../../Components/Navbar/Navbar";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from 'axios'
 import jwtDecode from 'jwt-decode';

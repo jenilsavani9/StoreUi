@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import swal from 'sweetalert2';
 import { useDeviceSelectors } from 'react-device-detect';
 import jwt_decode from "jwt-decode";
-import { useStateValue } from './Context/StateProvider';
+import { useStateValue } from '../../context/StateProvider';
 
 
 function Login() {

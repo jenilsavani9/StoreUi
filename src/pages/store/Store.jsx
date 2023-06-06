@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../Navbar/Navbar'
+import Navbar from '../../Components/Navbar/Navbar'
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
-import { useStateValue } from '../Context/StateProvider';
+import { useStateValue } from '../../context/StateProvider';
 import { useForm } from 'react-hook-form';
-import StoreCard from './StoreCard';
+import StoreCard from '../../Components/Store/StoreCard';
 import Swal from 'sweetalert2';
 
 
@@ -32,7 +32,7 @@ function Store() {
             SetUserInContext();
             const response = await axios({
                 method: 'get',
-                url: `https://localhost:44372/api/store?UserId=${user.UserId}`,
+                url: `https://localhost:44372/api/store?UserId=${decoded.UserId}`,
                 headers: { Authorization: `Bearer ${token}` },
             })
             setStores(response.data.result)
@@ -101,7 +101,7 @@ function Store() {
                 confirmButtonText: 'Cool'
             })
         }
-        
+
     }
 
     // const [tempError, setTempError] = useState();

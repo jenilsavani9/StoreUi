@@ -7,8 +7,8 @@ import { BrowserRouter } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 // state context 
-import { StateProvider }from './Components/Context/StateProvider';
-import reducer, { initialState } from './Components/Context/Reducer';
+import { StateProvider }from './context/StateProvider';
+import reducer, { initialState } from './context/Reducer';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

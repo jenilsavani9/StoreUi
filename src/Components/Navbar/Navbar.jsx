@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, json, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode"
-import { useStateValue } from "../Context/StateProvider";
+import { useStateValue } from "../../context/StateProvider";
 
 function Navbar() {
 
@@ -20,10 +20,10 @@ function Navbar() {
             setToken(localStorage.getItem('token'))
             const decoded = jwt_decode(token);
 
-            setFirstName(user.FirstName);
-            setLastName(user.LastName);
+            setFirstName(decoded.FirstName);
+            setLastName(decoded.LastName);
             // setLastLogin(JSON.parse(decoded.lastLogin));
-            if(user.role == "admin") {
+            if (decoded.role == "admin") {
                 setAdmin(true)
             }
         } catch (error) {
@@ -65,8 +65,8 @@ function Navbar() {
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item"><Link to="/" className="nav-link active">Home</Link></li>
                             <li className="nav-item"><Link to="/services" className="nav-link active">Services</Link></li>
-                            {admin? <li className="nav-item"><Link to="/Users" className="nav-link active">Users</Link></li> : "" }
-                            
+                            {admin ? <li className="nav-item"><Link to="/Users" className="nav-link active">Users</Link></li> : ""}
+
                         </ul>
 
                         {loginButton}

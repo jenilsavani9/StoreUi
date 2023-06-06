@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import "../App.css";
-import ResetPassword from './Users/ResetPassword';
+import "../../App.css";
+import ResetPassword from '../../Components/Users/ResetPassword';
 import swal from 'sweetalert2';
 
 function EmailValidation() {
@@ -71,7 +71,7 @@ function EmailValidation() {
                 </> :
 
                 <>
-                    
+
                 </>
 
             }
