@@ -5,7 +5,7 @@ import axios from 'axios'
 import jwtDecode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2';
-
+import { BASE_URL } from '../../constants/regex';
 
 function Users() {
 
@@ -59,7 +59,7 @@ function Users() {
 
             const response = await axios({
                 method: 'post',
-                url: 'https://localhost:44372/api/Admin/User/Add',
+                url: `${BASE_URL.URL}/api/Admin/User/Add`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
                 data: {
                     firstName: firstName,
@@ -108,7 +108,7 @@ function Users() {
         try {
             const response = await axios({
                 method: 'post',
-                url: `https://localhost:44372/api/Admin/User/Get?pageIndex=${pageIndex}&search=j`,
+                url: `${BASE_URL.URL}/api/Admin/User/Get?pageIndex=${pageIndex}&search=j`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             })
             setUsers(response.data.result)
@@ -132,7 +132,7 @@ function Users() {
         try {
             const response = await axios({
                 method: 'post',
-                url: `https://localhost:44372/api/Admin/User/Delete?userId=${event.target.value}`,
+                url: `${BASE_URL.URL}/api/Admin/User/Delete?userId=${event.target.value}`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             })
             LoadUsersData();

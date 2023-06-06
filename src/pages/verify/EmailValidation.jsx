@@ -4,6 +4,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import "../../App.css";
 import ResetPassword from '../../Components/Users/ResetPassword';
 import swal from 'sweetalert2';
+import { BASE_URL } from '../../constants/regex';
 
 function EmailValidation() {
 
@@ -33,7 +34,7 @@ function EmailValidation() {
         try {
             const response = await axios({
                 method: 'get',
-                url: `https://localhost:44372/api/Login/validate?UserId=${userId}&token=${validateToken}`
+                url: `${BASE_URL.URL}/api/Login/validate?UserId=${userId}&token=${validateToken}`
             })
             console.log(response)
             if (response.data.message == false) {

@@ -15,17 +15,17 @@ const reducer = (state, action) => {
         case 'SET_CITIES':
             return {
                 ...state,
-                user: action.cities
+                cities: action.cities
             }
         case 'SET_STATES':
             return {
                 ...state,
-                user: action.states
+                states: action.states
             }
-        case 'SET_COUNTRYS':
+        case 'SET_COUNTRY':
             return {
                 ...state,
-                user: action.country
+                country: action.country
             }
         default:
             return state;

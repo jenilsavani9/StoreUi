@@ -6,7 +6,7 @@ import swal from 'sweetalert2';
 import { useDeviceSelectors } from 'react-device-detect';
 import jwt_decode from "jwt-decode";
 import { useStateValue } from '../../context/StateProvider';
-
+import { BASE_URL } from '../../constants/regex';
 
 function Login() {
 
@@ -69,7 +69,7 @@ function Login() {
 
             const response = await axios({
                 method: 'post',
-                url: 'https://localhost:44372/api/Login',
+                url: `${BASE_URL.URL}/api/Login`,
                 data: {
                     emailId: email,
                     password: password,

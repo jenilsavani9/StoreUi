@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2';
-
+import { BASE_URL } from '../../constants/regex';
 
 function ResetPassword(sendEmailToResetPass) {
 
@@ -45,7 +45,7 @@ function ResetPassword(sendEmailToResetPass) {
             try {
                 const loginResponse = await axios({
                     method: 'post',
-                    url: 'https://localhost:44372/api/Login',
+                    url: `${BASE_URL.URL}/api/Login`,
                     data: {
                         emailId: sendEmailToResetPass.email,
                         password: tempPass
@@ -54,7 +54,7 @@ function ResetPassword(sendEmailToResetPass) {
                 const response = await axios({
                     method: 'post',
                     headers: { Authorization: `Bearer ${loginResponse.data}` },
-                    url: `https://localhost:44372/api/Login/resetpassword?email=${sendEmailToResetPass.email}&password=${tempPass}&newPassword=${newPass}`
+                    url: `${BASE_URL.URL}/api/Login/resetpassword?email=${sendEmailToResetPass.email}&password=${tempPass}&newPassword=${newPass}`
                 })
                 if(response.data.status == true) {
                     swal.fire({

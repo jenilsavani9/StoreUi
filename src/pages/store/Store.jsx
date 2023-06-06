@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import Navbar from '../../Components/Navbar/Navbar'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
 import { useStateValue } from '../../context/StateProvider';
 import { useForm } from 'react-hook-form';
 import StoreCard from '../../Components/Store/StoreCard';
 import Swal from 'sweetalert2';
+import $ from 'jquery';
+import 'bootstrap';
+
+import { MapLinkRegex } from '../../constants/regex';
+import Navbar from '../../Components/Navbar/Navbar'
 
 
 function Store() {
@@ -23,7 +27,10 @@ function Store() {
     const [stateList, setStateList] = useState();
     const [countryList, setCountryList] = useState();
 
+    // state for dispaying modal 
+    const [showModal, setShowModal] = useState(true);
 
+    const CloseRef = useRef();
 
     async function GetStores() {
         try {
@@ -64,24 +71,39 @@ function Store() {
         setCityList(response.data.cities)
         setCountryList(response.data.countries)
         setStateList(response.data.states)
+        dispatch({
+            type: 'SET_CITIES',
+            cities: response.data.cities
+        }, {
+            type: 'SET_STATES',
+            states: response.data.states
+        }, {
+            type: 'SET_COUNTRY',
+            country: response.data.country
+        })
+    }
+
+    const hideModal = () => {
+        $("#exampleModal").modal("hide");
     }
 
     async function handleAddStoreSubmit(data, e) {
-        console.log(data)
+
         try {
+
             const response = await axios({
                 method: 'post',
                 url: `https://localhost:44372/api/store`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
                 data: {
                     UserId: user.UserId,
-                    StoreName: data['Store Name'],
-                    Address: data['Address Line 1'] + data['Address Line 2'],
-                    CountryId: data['Country'],
-                    StateId: data['State'],
-                    CityId: data['City'],
-                    PostalCode: data['Postal Code'],
-                    LocationLink: data['Location Link'],
+                    StoreName: data.storeName,
+                    Address: data.AddressLine1 + data.AddressLine2,
+                    CountryId: data.Country,
+                    StateId: data.State,
+                    CityId: data.City,
+                    PostalCode: data.PostalCode,
+                    LocationLink: data.LocationLink,
                     Status: "active"
                 }
             })
@@ -91,9 +113,12 @@ function Store() {
                 icon: 'success',
                 confirmButtonText: 'Cool'
             })
+
+            CloseRef.current.click()
             e.target.reset();
             GetStores();
         } catch (error) {
+            console.log(error)
             Swal.fire({
                 title: 'Error!',
                 text: "Some Error Occure",
@@ -104,22 +129,18 @@ function Store() {
 
     }
 
-    // const [tempError, setTempError] = useState();
+    // for filter city and states
+    const [ct, setCt] = useState();
+    const [cs, setCs] = useState();
+    const FilterState = (event) => {
 
-    function handleErrorAddStoreSubmit(errors) {
-
-        // if(errors["Address Line 1"]) {
-        //     setTempError(tempError + "Address Line 1 Is not valid.")
-        // }
-        Swal.fire({
-            title: 'Error!',
-            text: "Enter Valid information",
-            icon: 'error',
-            confirmButtonText: 'Cool'
-        })
-        // setTempError("")
+        setCs(event.target.value);
     }
 
+    const FilterCity = (event) => {
+
+        setCt(event.target.value);
+    }
 
 
     return (
@@ -135,7 +156,7 @@ function Store() {
                                 <i className="bi bi-plus-lg"></i> Add Store
                             </button>
 
-                            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+                            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" visible={1}>
                                 <div className="modal-dialog modal-dialog-centered modal-lg">
                                     <div className="modal-content">
                                         <div className="modal-header">
@@ -143,60 +164,68 @@ function Store() {
                                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div className="modal-body">
-                                            <form onSubmit={handleSubmit(handleAddStoreSubmit, handleErrorAddStoreSubmit)}>
+                                            <form className='needs-validation' onSubmit={handleSubmit(handleAddStoreSubmit)} data-dismiss="modal">
                                                 <div>
-                                                    <label htmlFor="validationCustom03" className="form-label">Store Name</label>
-                                                    <input className="form-control" type="text" placeholder="Store Name" {...register("Store Name", { required: true, min: 5, maxLength: 80 })} />
+                                                    <label htmlFor="validationCustom03" className="form-label">Store Name*</label>
+                                                    <input className="form-control" type="text" placeholder="Store Name" {...register("StoreName", { required: true, min: 5, maxLength: 80 })} minLength={5} />
+                                                    <div className="text-danger">{errors.StoreName?.type === 'required' && <p role="alert">Store name is required</p>}</div>
                                                 </div>
                                                 <div>
-                                                    <label htmlFor="validationCustom04" className="form-label">Address Line 1</label>
-                                                    <textarea className="form-control" {...register("Address Line 1", { required: true, maxLength: 100 })} />
+                                                    <label htmlFor="validationCustom04" className="form-label">Address Line 1*</label>
+                                                    <textarea className="form-control" {...register("AddressLine1", { required: true, maxLength: 100 })} />
+                                                    <div className="text-danger">{errors.AddressLine1?.type === 'required' && <p role="alert">Address is required</p>}</div>
                                                 </div>
 
                                                 <div>
                                                     <label htmlFor="validationCustom04" className="form-label">Address Line 2</label>
-                                                    <textarea className="form-control" {...register("Address Line 2")} />
+                                                    <textarea className="form-control" {...register("AddressLine2")} />
                                                 </div>
                                                 <div>
-                                                    <label htmlFor="validationCustom05" className="form-label">Postal Code</label>
-                                                    <input type="number" className="form-control" placeholder="Postal Code" {...register("Postal Code", { required: true })} />
+                                                    <label htmlFor="validationCustom05" className="form-label">Postal Code*</label>
+                                                    <input type="number" className="form-control" placeholder="PostalCode" {...register("PostalCode", { required: true })} />
+                                                    <div className="text-danger">{errors.PostalCode?.type === 'required' && <p role="alert">Postal Code is required</p>}</div>
                                                 </div>
                                                 <div>
-                                                    <label htmlFor="validationCustom06" className="form-label">Locatio Link</label>
-                                                    <input type="url" className="form-control" placeholder="Location Link" {...register("Location Link", {
-                                                        required: true, pattern: /https:\/\/goo\.gl\/maps\//i
+                                                    <label htmlFor="validationCustom06" className="form-label">Locatio Link*</label>
+                                                    <input type="url" className="form-control" placeholder="Location Link" {...register("LocationLink", {
+                                                        required: true, pattern: MapLinkRegex.regex
                                                     })} />
+                                                    <div className="text-danger">{errors.LocationLink?.type === 'required' && <p role="alert">Location Link is required</p>}</div>
                                                 </div>
 
                                                 <div className="row">
                                                     <div className="col-4">
-                                                        <label htmlFor="validationCustom06" className="form-label">Country</label>
-                                                        <select className="form-control" {...register("Country")} onClick={LocationData}>
-                                                            {!countryList ? <option>Select Country</option> : countryList.map((item, index) => {
+                                                        <label htmlFor="validationCustom06" className="form-label">Country*</label>
+                                                        <select className="form-control" {...register("Country", { required: true })} onClick={LocationData} onChange={FilterState} id='country-select'>
+                                                            {!countryList ? <option value={""}>Select Country</option> : countryList.map((item, index) => {
                                                                 return (<option value={item.countryId} key={index}>{item.countryName}</option>)
                                                             })}
                                                         </select>
+                                                        <div className="text-danger">{errors.Country?.type === 'required' && <p role="alert">Country is required</p>}</div>
                                                     </div>
 
                                                     <div className="col-4">
-                                                        <label htmlFor="validationCustom06" className="form-label">State</label>
-                                                        <select className="form-control" {...register("State")}>
-                                                            {!stateList ? "" : stateList.map((item, index) => {
-                                                                return (<option value={item.stateId} key={index}>{item.stateName}</option>)
+                                                        <label htmlFor="validationCustom06" className="form-label">State*</label>
+                                                        <select className="form-control" {...register("State", { required: true })} onChange={FilterCity} onClick={FilterCity}>
+                                                            {!cs ? "" : stateList.map((item, index) => {
+                                                                return (cs == item.countryId ? <option value={item.stateId} key={index}>{item.stateName}</option> : "")
                                                             })}
                                                         </select>
+                                                        <div className="text-danger">{errors.State?.type === 'required' && <p role="alert">State is required</p>}</div>
                                                     </div>
 
                                                     <div className="col-4">
-                                                        <label htmlFor="validationCustom06" className="form-label">City</label>
-                                                        <select className="form-control" {...register("City")}>
-                                                            {!cityList ? "" : cityList.map((item, index) => {
-                                                                return (<option value={item.cityId} key={index}>{item.cityName}</option>)
+                                                        <label htmlFor="validationCustom06" className="form-label">City*</label>
+                                                        <select className="form-control" {...register("City", { required: true })}>
+                                                            {!ct ? "" : cityList.map((item, index) => {
+                                                                return (ct == item.stateId ? <option value={item.cityId} key={index}>{item.cityName}</option> : "")
                                                             })}
                                                         </select>
+                                                        <div className="text-danger">{errors.City?.type === 'required' && <p role="alert">City is required</p>}</div>
                                                     </div>
 
                                                 </div>
+                                                <button type="button" className="btn btn-secondary d-none" data-bs-dismiss="modal" ref={CloseRef} >Close</button>
                                                 <button className="btn btn-dark mt-3" type="submit">Save</button>
                                             </form>
                                         </div>
@@ -210,7 +239,7 @@ function Store() {
                     <div className='mt-3'>
                         <div className="row">
                             {stores && stores.map((item, index) => {
-                                return <StoreCard key={index} storesId={item.storesId} storeName={item.storeName} status={item.status} address={item.address} cityName={item.cityName} countryName={item.countryName} locationLink={item.locationLink} />
+                                return <StoreCard GetStores={GetStores} key={index} storesId={item.storeId} storeName={item.storeName} status={item.status} address={item.address} cityName={item.cityName} countryName={item.countryName} locationLink={item.locationLink} />
                             })}
 
 
