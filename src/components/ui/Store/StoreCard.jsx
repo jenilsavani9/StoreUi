@@ -3,19 +3,27 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import EditModal from './EditModal';
-import { BASE_URL } from '../../constants/regex';
+import { useStateValue } from '../../../contexts/StateProvider';
+import { CONTEXT_TYPE } from '../../../constants/constant';
+
 
 function StoreCard(props) {
 
     const nav = useNavigate();
+
+    const [{}, dispatch] = useStateValue();
 
     // func for delete store
     const reqForDeleteStore = async (data) => {
         try {
             const response = await axios({
                 method: 'delete',
-                url: `${BASE_URL.URL}/api/store/${data}`,
+                url: `/api/store/${data}`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            })
+            dispatch({
+                type: CONTEXT_TYPE.REMOVE_STORE,
+                item: response.data.result 
             })
             Swal.fire('Saved!', '', 'success').then(
                 props.GetStores()
@@ -23,7 +31,6 @@ function StoreCard(props) {
         } catch (error) {
             Swal.fire('Changes are not saved', '', 'error')
         }
-        
     }
 
     const deleteStore = async (event) => {
@@ -35,7 +42,7 @@ function StoreCard(props) {
 
             if (result.isConfirmed) {
                 reqForDeleteStore(event.target.value);
-                
+
             } else if (result.isDenied) {
                 Swal.fire('Changes are not saved', '', 'info')
             }
@@ -44,7 +51,7 @@ function StoreCard(props) {
 
     return (
 
-        <div className="col-sm-4 mb-3 mb-sm-0" key={props.storesId}>
+        <div className="col-12 col-md-6 col-lg-4 mb-3 mb-sm-0" key={props.storesId}>
             <div className="card" style={{ marginBottom: "25px" }}>
                 <div className="card-body">
                     <div className='d-flex justify-content-between'>
@@ -62,13 +69,14 @@ function StoreCard(props) {
                     </div>
 
                     <hr />
-                    {props.status == "active" ? 
-                    <div className='mt-2 d-flex'>
-                        <EditModal value={props.storesId} GetStore={props.GetStores} />
-                        <button value={props.storesId} className="btn btn-danger btn-sm ms-2" type='button' onClick={deleteStore}>Delete</button>
-                    </div>
-             : <div></div>}
-                    </div>
+                    {props.status == "active" ?
+                        <div className='mt-2 d-flex'>
+                            
+                            <EditModal value={props.storesId} GetStore={props.GetStores} />
+                            <button value={props.storesId} className="btn btn-danger btn-sm ms-2" type='button' onClick={deleteStore}>Delete</button>
+                        </div>
+                        : <div></div>}
+                </div>
             </div>
         </div>
     )

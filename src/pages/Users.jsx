@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from "../../Components/Navbar/Navbar";
+import Navbar from "../components/layout/Navbar";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from 'axios'
 import jwtDecode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2';
-import { BASE_URL } from '../../constants/regex';
+import { BASE_URL } from '../constants/regex';
+import FormError from '../components/ui/User/FormError';
 
 function Users() {
 
@@ -59,7 +60,7 @@ function Users() {
 
             const response = await axios({
                 method: 'post',
-                url: `${BASE_URL.URL}/api/Admin/User/Add`,
+                url: `/api/Admin/User/Add`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
                 data: {
                     firstName: firstName,
@@ -72,7 +73,7 @@ function Users() {
             setLastName("");
             setEmail("");
             setPassword("");
-            // document.getElementById('exampleModal').modal("hide");
+
             swal.fire({
                 title: 'Success',
                 text: "User Added",
@@ -93,13 +94,18 @@ function Users() {
     }
 
     const checkTokenExpirationMiddleware = () => {
-        const token = localStorage.getItem("token");
-        if (!token && jwtDecode(token).exp < Date.now() / 1000) {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token && jwtDecode(token).exp < Date.now() / 1000) {
+                localStorage.clear();
+                nav('/login');
+            }
+            if (!token || jwtDecode(token).role != "1") {
+                nav('/404');
+            }
+        } catch (error) {
             localStorage.clear();
-            nav('/login');
-        }
-        if (!token || jwtDecode(token).role != "admin") {
-            nav('/404');
+            nav('/login')
         }
     };
 
@@ -108,7 +114,7 @@ function Users() {
         try {
             const response = await axios({
                 method: 'post',
-                url: `${BASE_URL.URL}/api/Admin/User/Get?pageIndex=${pageIndex}&search=j`,
+                url: `/api/Admin/User/Get?pageIndex=${pageIndex}&search=j`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             })
             setUsers(response.data.result)
@@ -117,8 +123,6 @@ function Users() {
             checkTokenExpirationMiddleware();
         }
     }
-
-
 
     useEffect(() => {
         LoadUsersData();
@@ -132,7 +136,7 @@ function Users() {
         try {
             const response = await axios({
                 method: 'post',
-                url: `${BASE_URL.URL}/api/Admin/User/Delete?userId=${event.target.value}`,
+                url: `/api/Admin/User/Delete?userId=${event.target.value}`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             })
             LoadUsersData();
@@ -167,42 +171,22 @@ function Users() {
                                             <div className="col-md-6">
                                                 <label htmlFor="validationCustom01" className="form-label">First name</label>
                                                 <input type="text" className="form-control" id="validationCustom01" minlength="5" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
-                                                <div className="valid-feedback">
-                                                    Looks good!
-                                                </div>
-                                                <div className="invalid-feedback">
-                                                    First Name is not valid.
-                                                </div>
+                                                <FormError message={"First Name is not Valid"} />
                                             </div>
                                             <div className="col-md-6">
                                                 <label htmlFor="validationCustom02" className="form-label">Last name</label>
                                                 <input type="text" className="form-control" id="validationCustom02" minlength="5" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
-                                                <div className="valid-feedback">
-                                                    Looks good!
-                                                </div>
-                                                <div className="invalid-feedback">
-                                                    Last Name is not valid.
-                                                </div>
+                                                <FormError message={"Last Name is not valid."} />
                                             </div>
                                             <div className="col-md-12">
                                                 <label htmlFor="validationCustom03" className="form-label">Email</label>
                                                 <input type="email" className="form-control" id="validationCustom03" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                                                <div className="valid-feedback">
-                                                    Looks good!
-                                                </div>
-                                                <div className="invalid-feedback">
-                                                    Email is not valid.
-                                                </div>
+                                                <FormError message={"Email is not valid."} />
                                             </div>
                                             <div className="col-md-12">
                                                 <label htmlFor="validationCustom04" className="form-label">Password</label>
                                                 <input type="password" className="form-control" id="validationCustom04" minlength="5" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                                                <div className="valid-feedback">
-                                                    Looks good!
-                                                </div>
-                                                <div className="invalid-feedback">
-                                                    Password is not valid.
-                                                </div>
+                                                <FormError message={"Password is not valid."} />
                                             </div>
                                             <div className="col-12 d-flex justify-content-end">
                                                 {loader ? <button className="btn btn-dark" type="submit" disabled><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -243,8 +227,8 @@ function Users() {
                                                 {u.status == "active" ? <span className="badge bg-success">Active</span> : u.status == "deactive" ? <span className="badge bg-danger">Deactive</span> : <span className="badge bg-secondary">Pending</span>}
                                             </h5>
                                         </td>
-                                        <td>{u.roles}</td>
-                                        <td>{(u.status != "deactive" && u.roles != "admin") ? <button type="button" class="btn btn-outline-danger btn-sm" value={u.userId} onClick={DeleteUser}>Delete</button> : ""}</td>
+                                        <td>{u.roles=="1"? "Admin" : "Customer"}</td>
+                                        <td>{(u.status != "deactive" && u.roles != "1") ? <button type="button" class="btn btn-outline-danger btn-sm" value={u.userId} onClick={DeleteUser}>Delete</button> : ""}</td>
                                     </tr>)
                                 })}
                             </tbody>

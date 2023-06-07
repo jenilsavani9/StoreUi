@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, json, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode"
-import { useStateValue } from "../../context/StateProvider";
+import { useStateValue } from "../../contexts/StateProvider";
+import jwtDecode from "jwt-decode";
 
 function Navbar() {
 
@@ -15,15 +16,33 @@ function Navbar() {
     // const [lastLogin, setLastLogin] = useState();
     const [admin, setAdmin] = useState(false)
 
+    const checkTokenExpirationMiddleware = () => {
+
+        try {
+            const token = localStorage.getItem("token");
+            if (token && jwtDecode(token).exp < Date.now() / 1000) {
+                localStorage.clear();
+                nav('/login');
+            }
+            if (!token || jwtDecode(token).role != "1") {
+                nav('/404');
+            }
+        } catch (error) {
+            localStorage.clear();
+            nav('/login')
+        }
+    };
+
     useEffect(() => {
         try {
+            checkTokenExpirationMiddleware();
             setToken(localStorage.getItem('token'))
             const decoded = jwt_decode(token);
 
             setFirstName(decoded.FirstName);
             setLastName(decoded.LastName);
             // setLastLogin(JSON.parse(decoded.lastLogin));
-            if (decoded.role == "admin") {
+            if (decoded.role == "1") {
                 setAdmin(true)
             }
         } catch (error) {

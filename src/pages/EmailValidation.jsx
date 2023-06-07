@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import "../../App.css";
-import ResetPassword from '../../Components/Users/ResetPassword';
+import "../App.css";
+import ResetPassword from '../components/ui/User/ResetPassword';
 import swal from 'sweetalert2';
-import { BASE_URL } from '../../constants/regex';
+import { BASE_URL } from '../constants/regex';
 
 function EmailValidation() {
 
@@ -34,7 +34,7 @@ function EmailValidation() {
         try {
             const response = await axios({
                 method: 'get',
-                url: `${BASE_URL.URL}/api/Login/validate?UserId=${userId}&token=${validateToken}`
+                url: `/api/Login/validate?UserId=${userId}&token=${validateToken}`
             })
             console.log(response)
             if (response.data.message == false) {

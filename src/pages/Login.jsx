@@ -5,15 +5,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import swal from 'sweetalert2';
 import { useDeviceSelectors } from 'react-device-detect';
 import jwt_decode from "jwt-decode";
-import { useStateValue } from '../../context/StateProvider';
-import { BASE_URL } from '../../constants/regex';
+
+import { useStateValue } from '../contexts/StateProvider';
+import { BASE_URL } from '../constants/regex';
+import { CONTEXT_TYPE } from '../constants/constant';
 
 function Login() {
 
     // for getting device information use : react-device-detect
     const [selectors, data] = useDeviceSelectors(window.navigator.userAgent);
 
-    const [{user}, dispatch] = useStateValue();
+    const [{ user }, dispatch] = useStateValue();
 
     const nav = useNavigate();
     const [email, setEmail] = useState("");
@@ -30,15 +32,15 @@ function Login() {
     async function SetUserInContext() {
         if (localStorage.getItem('token') != null) {
             dispatch({
-              type: 'SET_USER',
-              user: await jwt_decode(localStorage.getItem('token'))
+                type: CONTEXT_TYPE.SET_USER,
+                user: await jwt_decode(localStorage.getItem('token'))
             })
-          } else {
+        } else {
             await dispatch({
-              type: 'SET_USER',
-              user: null
+                type: CONTEXT_TYPE.SET_USER,
+                user: null
             })
-          }
+        }
     }
 
     const SubmitLoginForm = async (event) => {
@@ -69,7 +71,7 @@ function Login() {
 
             const response = await axios({
                 method: 'post',
-                url: `${BASE_URL.URL}/api/Login`,
+                url: `/api/Login`,
                 data: {
                     emailId: email,
                     password: password,

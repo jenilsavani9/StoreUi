@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2';
-import { BASE_URL } from '../../constants/regex';
+import { BASE_URL } from '../../../constants/regex';
 
 function ResetPassword(sendEmailToResetPass) {
 
@@ -33,19 +33,19 @@ function ResetPassword(sendEmailToResetPass) {
 
     async function onHandleSubmit(event) {
         event.preventDefault();
-        if(newPass != conPass) {
+        if (newPass != conPass) {
             swal.fire({
                 title: 'Error!',
                 text: "New Password and Confirm password must be same!",
                 icon: 'error',
                 confirmButtonText: 'Cool'
             })
-        } 
+        }
         else {
             try {
                 const loginResponse = await axios({
                     method: 'post',
-                    url: `${BASE_URL.URL}/api/Login`,
+                    url: `/api/Login`,
                     data: {
                         emailId: sendEmailToResetPass.email,
                         password: tempPass
@@ -54,9 +54,9 @@ function ResetPassword(sendEmailToResetPass) {
                 const response = await axios({
                     method: 'post',
                     headers: { Authorization: `Bearer ${loginResponse.data}` },
-                    url: `${BASE_URL.URL}/api/Login/resetpassword?email=${sendEmailToResetPass.email}&password=${tempPass}&newPassword=${newPass}`
+                    url: `/api/Login/resetpassword?email=${sendEmailToResetPass.email}&password=${tempPass}&newPassword=${newPass}`
                 })
-                if(response.data.status == true) {
+                if (response.data.status == true) {
                     swal.fire({
                         title: 'Success!',
                         text: "Password changed successfully",
@@ -75,14 +75,14 @@ function ResetPassword(sendEmailToResetPass) {
                 }
             } catch (error) {
                 swal.fire({
-                        title: 'Error!',
-                        text: "Some Error Occur",
-                        icon: 'error',
-                        confirmButtonText: 'Cool'
-                    })
+                    title: 'Error!',
+                    text: "Some Error Occur",
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
             }
         }
-        
+
     }
 
     return (

@@ -2,11 +2,13 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 
-import { MapLinkRegex, BASE_URL } from '../../constants/regex';
+import { MapLinkRegex, BASE_URL } from '../../../constants/regex';
 import Swal from 'sweetalert2';
 
 
 function EditModal(props) {
+
+    axios.defaults.baseURL = BASE_URL.URL;
 
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
 
@@ -19,7 +21,7 @@ function EditModal(props) {
     async function LoadData() {
         const response = await axios({
             method: 'get',
-            url: `${BASE_URL.URL}/api/store/${props.value}`,
+            url: `/api/store/${props.value}`,
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         })
         setValue('StoreName', response.data.result[0].storeName)
@@ -31,7 +33,7 @@ function EditModal(props) {
     async function LocationData() {
         const response = await axios({
             method: 'get',
-            url: `${BASE_URL.URL}/api/store/locations`,
+            url: `/api/store/locations`,
         })
         setCityList(response.data.cities)
         setCountryList(response.data.countries)
@@ -42,7 +44,7 @@ function EditModal(props) {
         try {
             const response = await axios({
                 method: 'post',
-                url: `${BASE_URL.URL}/api/store/${props.value}`,
+                url: `/api/store/${props.value}`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
                 data: {
                     StoreId: props.value,

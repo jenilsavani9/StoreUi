@@ -1,10 +1,10 @@
 import React from 'react'
 import { Routes, Route, Navigate } from "react-router-dom";
-import Login from '../pages/login/Login';
-import EmailValidation from '../pages/verify/EmailValidation';
-import Store from '../pages/store/Store';
-import Services from '../pages/service/Services';
-import Users from '../pages/user/Users';
+import Login from '../pages/Login';
+import EmailValidation from '../pages/EmailValidation';
+import Store from '../pages/Store';
+import Services from '../pages/Services';
+import Users from '../pages/Users';
 import PageNotFound from './PageNotFound';
 
 function RouterConfig() {

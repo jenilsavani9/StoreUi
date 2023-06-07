@@ -2,7 +2,8 @@ export const initialState = {
     user: null,
     cities: null,
     country: null,
-    states: null
+    states: null,
+    stores: []
 }
 
 const reducer = (state, action) => {
@@ -12,20 +13,27 @@ const reducer = (state, action) => {
                 ...state,
                 user: action.user
             }
-        case 'SET_CITIES':
+        case 'SET_STORES':
             return {
                 ...state,
-                cities: action.cities
+                stores: action.stores
             }
-        case 'SET_STATES':
+        case 'ADD_STORES':
             return {
                 ...state,
-                states: action.states
+                stores: [...state.stores, action.store]
             }
-        case 'SET_COUNTRY':
+        case 'REMOVE_STORE':
+            const index = state.stores.findIndex(
+                (item) => item.storeId == action.item.storeId
+            )
+            let newStore = [...state.stores]
+            if(index >= 0) {
+                newStore.splice(index, 1)
+            }
             return {
                 ...state,
-                country: action.country
+                stores: newStore
             }
         default:
             return state;
