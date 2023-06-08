@@ -84,7 +84,7 @@ function Login() {
         } catch (error) {
             swal.fire({
                 title: 'Error!',
-                text: "Some Error Occure",
+                text: "Wrong Credentials!",
                 icon: 'error',
                 confirmButtonText: 'Cool'
             })

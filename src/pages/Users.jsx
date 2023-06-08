@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2';
 import { BASE_URL } from '../constants/regex';
 import FormError from '../components/ui/User/FormError';
+import { Pagination } from 'react-bootstrap';
 
 function Users() {
 
@@ -83,34 +84,17 @@ function Users() {
             nav('/Users');
             LoadUsersData();
         } catch (error) {
-            swal.fire({
-                title: 'Error!',
-                text: error.response.data,
-                icon: 'error',
-                confirmButtonText: 'Cool'
-            })
+            // swal.fire({
+            //     title: 'Error!',
+            //     text: error.response.data,
+            //     icon: 'error',
+            //     confirmButtonText: 'Cool'
+            // })
         }
         setLoader(false);
     }
 
-    const checkTokenExpirationMiddleware = () => {
-        try {
-            const token = localStorage.getItem("token");
-            if (!token && jwtDecode(token).exp < Date.now() / 1000) {
-                localStorage.clear();
-                nav('/login');
-            }
-            if (!token || jwtDecode(token).role != "1") {
-                nav('/404');
-            }
-        } catch (error) {
-            localStorage.clear();
-            nav('/login')
-        }
-    };
-
     async function LoadUsersData() {
-        checkTokenExpirationMiddleware();
         try {
             const response = await axios({
                 method: 'post',
@@ -120,7 +104,6 @@ function Users() {
             setUsers(response.data.result)
             setUserCount(response.data.userCount)
         } catch (error) {
-            checkTokenExpirationMiddleware();
         }
     }
 
@@ -148,7 +131,6 @@ function Users() {
 
     return (
         <div>
-            <Navbar />
             <div className="container">
                 <div className="d-flex justify-content-between mt-3">
                     <h2>Users</h2>
@@ -170,12 +152,12 @@ function Users() {
                                         <form className="row g-3 needs-validation" noValidate onSubmit={handleAddUserSubmit}>
                                             <div className="col-md-6">
                                                 <label htmlFor="validationCustom01" className="form-label">First name</label>
-                                                <input type="text" className="form-control" id="validationCustom01" minlength="5" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+                                                <input type="text" className="form-control" id="validationCustom01" minLength="5" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
                                                 <FormError message={"First Name is not Valid"} />
                                             </div>
                                             <div className="col-md-6">
                                                 <label htmlFor="validationCustom02" className="form-label">Last name</label>
-                                                <input type="text" className="form-control" id="validationCustom02" minlength="5" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+                                                <input type="text" className="form-control" id="validationCustom02" minLength="5" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
                                                 <FormError message={"Last Name is not valid."} />
                                             </div>
                                             <div className="col-md-12">
@@ -185,11 +167,11 @@ function Users() {
                                             </div>
                                             <div className="col-md-12">
                                                 <label htmlFor="validationCustom04" className="form-label">Password</label>
-                                                <input type="password" className="form-control" id="validationCustom04" minlength="5" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                                                <input type="password" className="form-control" id="validationCustom04" minLength="5" value={password} onChange={(e) => setPassword(e.target.value)} required />
                                                 <FormError message={"Password is not valid."} />
                                             </div>
                                             <div className="col-12 d-flex justify-content-end">
-                                                {loader ? <button className="btn btn-dark" type="submit" disabled><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                {loader ? <button className="btn btn-dark" type="submit" disabled><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     Loading...</button> : <button className="btn btn-dark" type="submit">Save</button>}
 
                                             </div>
@@ -217,8 +199,8 @@ function Users() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {users.map(u => {
-                                    return (<tr key={u.userId}>
+                                {users.map((u, index) => {
+                                    return (<tr key={index}>
                                         <td>{u.firstName}</td>
                                         <td>{u.lastName}</td>
                                         <td>{u.email}</td>
@@ -227,8 +209,8 @@ function Users() {
                                                 {u.status == "active" ? <span className="badge bg-success">Active</span> : u.status == "deactive" ? <span className="badge bg-danger">Deactive</span> : <span className="badge bg-secondary">Pending</span>}
                                             </h5>
                                         </td>
-                                        <td>{u.roles=="1"? "Admin" : "Customer"}</td>
-                                        <td>{(u.status != "deactive" && u.roles != "1") ? <button type="button" class="btn btn-outline-danger btn-sm" value={u.userId} onClick={DeleteUser}>Delete</button> : ""}</td>
+                                        <td>{u.roles == "1" ? "Admin" : "Customer"}</td>
+                                        <td>{(u.status != "deactive" && u.roles != "1") ? <button type="button" className="btn btn-outline-danger btn-sm" value={u.userId} onClick={DeleteUser}>Delete</button> : ""}</td>
                                     </tr>)
                                 })}
                             </tbody>
@@ -236,25 +218,28 @@ function Users() {
                         </table>
                         <div className='d-flex justify-content-center'>
                             <nav aria-label="Page navigation example">
-                                <ul class="pagination">
-                                    <li class="page-item me-2">
-                                        <a class="page-link btn text-dark" onClick={() => { (pageIndex - 1) < 0 ? setPageIndex(pageIndex) : setPageIndex(pageIndex - 1) }} aria-label="Previous">
+                                <ul className="pagination">
+                                    <li className="page-item me-2">
+                                        <a className="page-link btn text-dark" onClick={() => { (pageIndex - 1) < 0 ? setPageIndex(pageIndex) : setPageIndex(pageIndex - 1) }} aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
-                                    {Array.from({ length: (userCount / 10) + 1 }, (_, index) => index + 1).map(i => {
-                                        return <li class="page-item me-2 "><a class="page-link btn text-dark" onClick={() => setPageIndex(i - 1)}>{i}</a></li>
+                                    {Array.from({ length: (userCount / 10) + 1 }, (_, index) => index + 1).map((i, index) => {
+                                        return <li key={index} className="page-item me-2 "><a className="page-link btn text-dark" onClick={() => setPageIndex(i - 1)}>{i}</a></li>
                                     })}
 
-                                    <li class="page-item ">
-                                        <a class="page-link btn text-dark" onClick={() => { (pageIndex + 1) > userCount / 10 ? setPageIndex(pageIndex) : setPageIndex(pageIndex + 1) }} aria-label="Next">
+                                    <li className="page-item ">
+                                        <a className="page-link btn text-dark" onClick={() => { (pageIndex + 1) > userCount / 10 ? setPageIndex(pageIndex) : setPageIndex(pageIndex + 1) }} aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>
                                 </ul>
                             </nav>
                         </div>
+                         
                     </div>
+
+                     
 
                 </div>
             </div>

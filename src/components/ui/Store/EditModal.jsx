@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form';
 
 import { MapLinkRegex, BASE_URL } from '../../../constants/regex';
 import Swal from 'sweetalert2';
+import { CONTEXT_TYPE } from '../../../constants/constant';
+import { useStateValue } from '../../../contexts/StateProvider';
 
 
 function EditModal(props) {
@@ -11,6 +13,8 @@ function EditModal(props) {
     axios.defaults.baseURL = BASE_URL.URL;
 
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+
+    const [{ stores }, dispatch] = useStateValue();
 
     const [cityList, setCityList] = useState();
     const [stateList, setStateList] = useState();
@@ -66,7 +70,11 @@ function EditModal(props) {
             })
             CloseRef.current.click()
             e.target.reset();
-            props.GetStore();
+            
+            dispatch({
+                type: CONTEXT_TYPE.EDIT_STORE,
+                item: response.data.result[0]
+            })
         } catch (error) {
             Swal.fire({
                 title: 'Error!',
@@ -93,11 +101,11 @@ function EditModal(props) {
 
     return (
         <div>
-            <button type="button" className="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal1" onClick={LoadData}>
+            <button type="button" className="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal2" onClick={LoadData}>
                 Edit
             </button>
 
-            <div className="modal fade" id="exampleModal1" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+            <div className="modal fade" id="exampleModal2" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
                 <div className="modal-dialog modal-dialog-centered modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">

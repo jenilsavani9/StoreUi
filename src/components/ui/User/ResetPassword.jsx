@@ -89,9 +89,9 @@ function ResetPassword(sendEmailToResetPass) {
         <div>
             <h3>Reset Password</h3>
             <form className='row g-3 needs-validation' noValidate onSubmit={onHandleSubmit}>
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Email </label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={sendEmailToResetPass.email} disabled />
+                <div className="mb-3">
+                    <label for="exampleInputEmail1" className="form-label">Email </label>
+                    <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={sendEmailToResetPass.email} disabled />
                     <div className="valid-feedback">
                         Looks good!
                     </div>
@@ -99,9 +99,9 @@ function ResetPassword(sendEmailToResetPass) {
                         Email is not valid.
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Temprary Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" value={tempPass} minLength="5" onChange={(e) => setTempPass(e.target.value)} />
+                <div className="mb-3">
+                    <label for="exampleInputPassword1" className="form-label">Temprary Password</label>
+                    <input type="password" className="form-control" id="exampleInputPassword1" value={tempPass} minLength="5" onChange={(e) => setTempPass(e.target.value)} />
                     <div className="valid-feedback">
                         Looks good!
                     </div>
@@ -109,9 +109,9 @@ function ResetPassword(sendEmailToResetPass) {
                         old Password is not valid.
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword2" class="form-label">New Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword2" value={newPass} minLength="5" onChange={(e) => setNewPass(e.target.value)} />
+                <div className="mb-3">
+                    <label for="exampleInputPassword2" className="form-label">New Password</label>
+                    <input type="password" className="form-control" id="exampleInputPassword2" value={newPass} minLength="5" onChange={(e) => setNewPass(e.target.value)} />
                     <div className="valid-feedback">
                         Looks good!
                     </div>
@@ -119,9 +119,9 @@ function ResetPassword(sendEmailToResetPass) {
                         New Password is not valid.
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword3" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword3" value={conPass} minLength="5" onChange={(e) => setConPass(e.target.value)} />
+                <div className="mb-3">
+                    <label for="exampleInputPassword3" className="form-label">Confirm Password</label>
+                    <input type="password" className="form-control" id="exampleInputPassword3" value={conPass} minLength="5" onChange={(e) => setConPass(e.target.value)} />
                     <div className="valid-feedback">
                         Looks good!
                     </div>
@@ -129,7 +129,7 @@ function ResetPassword(sendEmailToResetPass) {
                         Confirm Password is not valid.
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary">Submit</button>
             </form>
         </div>
     )

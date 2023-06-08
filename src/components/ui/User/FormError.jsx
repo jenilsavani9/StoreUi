@@ -2,7 +2,7 @@ import React from 'react'
 
 function FormError({ message }) {
   return (
-    <div class="invalid-feedback">{message}</div>
+    <div className="invalid-feedback">{message}</div>
   )
 }
 

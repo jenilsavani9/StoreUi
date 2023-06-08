@@ -4,7 +4,6 @@ import jwt_decode from "jwt-decode";
 import 'bootstrap';
 
 import StoreCard from '../components/ui/Store/StoreCard';
-import Navbar from '../components/layout/Navbar'
 import { useStateValue } from '../contexts/StateProvider';
 import AddModal from '../components/ui/Store/AddModal';
 import { CONTEXT_TYPE } from '../constants/constant';
@@ -54,7 +53,6 @@ function Store() {
 
     return (
         <div>
-            <Navbar />
             <div className='container'>
                 <div className="container">
                     <div className="d-flex justify-content-between mt-3">
@@ -64,9 +62,9 @@ function Store() {
 
                     <div className='mt-3'>
                         <div className="row">
-                            {stores && stores.map((item, index) => {
+                            {stores.length > 0 ? stores?.map((item, index) => {
                                 return <StoreCard GetStores={GetStores} key={index} storesId={item.storeId} storeName={item.storeName} status={item.status} address={item.address} cityName={item.cityName} countryName={item.countryName} locationLink={item.locationLink} />
-                            })}
+                            }) : <div>No Store Found</div>}
                         </div>
                     </div>
                 </div>

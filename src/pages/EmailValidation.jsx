@@ -1,10 +1,9 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import "../App.css";
 import ResetPassword from '../components/ui/User/ResetPassword';
 import swal from 'sweetalert2';
-import { BASE_URL } from '../constants/regex';
 
 function EmailValidation() {
 
@@ -51,23 +50,18 @@ function EmailValidation() {
                 setValidateResponse(true)
                 setSendEmailToResetPass(response.data.user[0].email)
             }
-
         } catch (error) {
 
         }
-
-
     }
-
-    console.log(userId, validateToken);
 
     return (
 
         <div className='d-flex flex-column align-items-center mt-5'>
             {validateResponse ?
                 <>
-                    {sendEmailToResetPass != "" ? <ResetPassword email={sendEmailToResetPass} /> : <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                    {sendEmailToResetPass != "" ? <ResetPassword email={sendEmailToResetPass} /> : <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
                     </div>}
                 </> :
 

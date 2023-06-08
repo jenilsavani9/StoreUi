@@ -28,7 +28,7 @@ function AddModal() {
     async function LocationData() {
         const response = await axios({
             method: 'get',
-            url: `https://localhost:44372/api/store/locations`,
+            url: `/api/store/locations`,
         })
         setCityList(response.data.cities)
         setCountryList(response.data.countries)
@@ -42,7 +42,7 @@ function AddModal() {
 
             const response = await axios({
                 method: 'post',
-                url: `https://localhost:44372/api/store`,
+                url: `/api/store`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
                 data: {
                     UserId: user.UserId,
