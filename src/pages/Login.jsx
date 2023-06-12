@@ -6,16 +6,10 @@ import swal from 'sweetalert2';
 import { useDeviceSelectors } from 'react-device-detect';
 import jwt_decode from "jwt-decode";
 
-import { useStateValue } from '../contexts/StateProvider';
-import { BASE_URL } from '../constants/regex';
-import { CONTEXT_TYPE } from '../constants/constant';
-
 function Login() {
 
     // for getting device information use : react-device-detect
-    const [selectors, data] = useDeviceSelectors(window.navigator.userAgent);
-
-    const [{ user }, dispatch] = useStateValue();
+    // const [selectors, data] = useDeviceSelectors(window.navigator.userAgent);
 
     const nav = useNavigate();
     const [email, setEmail] = useState("");
@@ -29,23 +23,9 @@ function Login() {
         setEmail(event.target.value)
     }
 
-    async function SetUserInContext() {
-        if (localStorage.getItem('token') != null) {
-            dispatch({
-                type: CONTEXT_TYPE.SET_USER,
-                user: await jwt_decode(localStorage.getItem('token'))
-            })
-        } else {
-            await dispatch({
-                type: CONTEXT_TYPE.SET_USER,
-                user: null
-            })
-        }
-    }
-
     const SubmitLoginForm = async (event) => {
         event.preventDefault();
-        const { osName, browserName } = selectors;
+        // const { osName, browserName } = selectors;
         try {
             var LastLogin = {}
             try {
@@ -61,12 +41,6 @@ function Login() {
                     "date": date
                 }
             } catch (error) {
-                // swal.fire({
-                //     title: 'Error!',
-                //     text: LastLogin,
-                //     icon: 'error',
-                //     confirmButtonText: 'Cool'
-                //   })
             }
 
             const response = await axios({
@@ -79,7 +53,6 @@ function Login() {
                 }
             })
             localStorage.setItem('token', response.data)
-            SetUserInContext();
             nav('/');
         } catch (error) {
             swal.fire({

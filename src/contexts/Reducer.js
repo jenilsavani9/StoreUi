@@ -72,7 +72,7 @@ const reducer = (state, action) => {
             }
         case 'REMOVE_FEATURE':
             const removeFeature = state.features.findIndex(
-                (item) => item.featuresId == action.features.featuresId
+                (item) => item.featureId == action.features.featureId
             )
             let newFeature = [...state.features]
             if (removeFeature >= 0) {
@@ -81,6 +81,16 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 features: newFeature
+            }
+        case 'MODAL_STORE':
+            return {
+                ...state,
+                modalStore: action.item
+            }
+        case 'MODAL_FEATURE':
+            return {
+                ...state,
+                modalFeature: action.item
             }
         default:
             return state;

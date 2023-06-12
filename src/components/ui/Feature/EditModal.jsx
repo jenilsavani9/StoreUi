@@ -6,24 +6,33 @@ import Form from 'react-bootstrap/Form';
 import jwt_decode from "jwt-decode";
 import { CONTEXT_TYPE } from '../../../constants/constant';
 import axios from 'axios';
+import { useStateValue } from '../../../contexts/StateProvider';
 
-import { useStateValue } from '../../../contexts/StateProvider'
-
-
-
-function AddModal() {
+function EditModal({ value }) {
 
     const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
-    const [validated, setValidated] = useState(false);
-
+    const [{ features }, dispatch] = useStateValue();
+    const [featureId, setFeatureId] = useState();
     const [featureName, setFeatureName] = useState("");
     const [featureDescription, setFeatureDescription] = useState("");
 
-    const [{  }, dispatch] = useStateValue();
+    const handleClose = () => setShow(false);
+    const handleShow = (event) => {
+        if(features != null) {
+            const index = features.findIndex(
+                (item) => item.featureId == event.target.value
+            )
+            console.log(features[index])
+            setFeatureName(features[index]?.featureName)
+            setFeatureDescription(features[index]?.featureDescription)
+            setFeatureId(features[index]?.featureId)
+        }
+        setShow(true);
+    }
+
+    const [validated, setValidated] = useState(false);
+
+    
 
 
     const handleSubmit = async (event) => {
@@ -32,22 +41,21 @@ function AddModal() {
             setValidated(false);
             handleClose();
 
-
             const decoded = jwt_decode(localStorage.getItem('token'));
             const response = await axios({
-                method: 'post',
+                method: 'put',
                 url: `/api/feature`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
                 data: {
-                    featuresId: 0,
+                    featuresId: featureId,
                     userId: decoded.UserId,
                     featuresName: featureName,
                     featuresDescription: featureDescription
                 }
             })
             dispatch({
-                type: CONTEXT_TYPE.ADD_FEATURE,
-                features: response.data.result[0]
+                type: CONTEXT_TYPE.EDIT_FEATURE,
+                item: response.data.result[0]
             })
             setFeatureName("");
             setFeatureDescription("");
@@ -59,13 +67,11 @@ function AddModal() {
 
     return (
         <div>
-            <Button variant="dark" onClick={handleShow}>
-                <i className="bi bi-plus-lg"></i> Add Feature
-            </Button>
+            <Button className='btn btn-dark btn-sm' variant="dark" value={value} onClick={handleShow}>Edit</Button>
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add Feature</Modal.Title>
+                    <Modal.Title>Edit Feature</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -80,7 +86,6 @@ function AddModal() {
                             <Form.Label>Feature Description</Form.Label>
                             <Form.Control as="textarea" rows={3} value={featureDescription} onChange={e => setFeatureDescription(e.target.value)} />
                         </Form.Group>
-                        
                         <Button variant="dark" type="submit">
                             Submit
                         </Button>
@@ -91,4 +96,4 @@ function AddModal() {
     )
 }
 
-export default AddModal
+export default EditModal

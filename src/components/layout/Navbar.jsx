@@ -17,16 +17,13 @@ function Navbar() {
     const [admin, setAdmin] = useState(false)
 
     const checkTokenExpirationMiddleware = () => {
-
         try {
             const token = localStorage.getItem("token");
             if (token && jwtDecode(token).exp < Date.now() / 1000) {
                 localStorage.clear();
                 nav('/login');
             }
-            if (!token || jwtDecode(token).role != "1") {
-                nav('/404');
-            }
+           
         } catch (error) {
             localStorage.clear();
             nav('/login')
@@ -42,7 +39,7 @@ function Navbar() {
             setFirstName(decoded.FirstName);
             setLastName(decoded.LastName);
             // setLastLogin(JSON.parse(decoded.lastLogin));
-            if (decoded.role == "1") {
+            if (decoded.role == "admin") {
                 setAdmin(true)
             }
         } catch (error) {
@@ -64,7 +61,7 @@ function Navbar() {
 
     return (
         <div>
-            <nav className="navbar navbar-dark navbar-expand-lg bg-dark navbar-expand-lg" data-bs-theme="dark">
+            <nav className="navbar navbar-dark navbar-expand-md bg-dark navbar-expand-lg" data-bs-theme="dark">
                 <div className="container container-fluid">
                     <Link to="/" className="navbar-brand">
                         Stores

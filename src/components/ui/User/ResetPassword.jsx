@@ -40,6 +40,13 @@ function ResetPassword(sendEmailToResetPass) {
                 icon: 'error',
                 confirmButtonText: 'Cool'
             })
+        } else if(newPass != tempPass ) {
+            swal.fire({
+                title: 'Error!',
+                text: "New Password and Old password must be different!",
+                icon: 'error',
+                confirmButtonText: 'Cool'
+            })
         }
         else {
             try {

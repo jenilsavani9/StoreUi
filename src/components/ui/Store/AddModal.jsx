@@ -47,7 +47,8 @@ function AddModal() {
                 data: {
                     UserId: user.UserId,
                     StoreName: data.StoreName,
-                    Address: data.AddressLine1 + data.AddressLine2,
+                    AddressLine1: data.AddressLine1,
+                    AddressLine2: data.AddressLine2,
                     CountryId: data.Country,
                     StateId: data.State,
                     CityId: data.City,
@@ -167,7 +168,6 @@ function AddModal() {
                                         </select>
                                         <div className="text-danger">{errors.City?.type === 'required' && <p role="alert">City is required</p>}</div>
                                     </div>
-
                                 </div>
                                 <button type="button" className="btn btn-secondary d-none" data-bs-dismiss="modal" ref={CloseRef} >Close</button>
                                 <button className="btn btn-dark mt-3" type="submit">Save</button>

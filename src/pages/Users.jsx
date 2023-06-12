@@ -108,6 +108,10 @@ function Users() {
     }
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token || jwtDecode(token).role != "admin") {
+            nav('/404');
+        }
         LoadUsersData();
     }, [])
 
@@ -206,11 +210,11 @@ function Users() {
                                         <td>{u.email}</td>
                                         <td>
                                             <h5>
-                                                {u.status == "active" ? <span className="badge bg-success">Active</span> : u.status == "deactive" ? <span className="badge bg-danger">Deactive</span> : <span className="badge bg-secondary">Pending</span>}
+                                                {u.status == "0" ? <span className="badge bg-success">Active</span> : u.status == "1" ? <span className="badge bg-danger">Deactive</span> : <span className="badge bg-secondary">Pending</span>}
                                             </h5>
                                         </td>
-                                        <td>{u.roles == "1" ? "Admin" : "Customer"}</td>
-                                        <td>{(u.status != "deactive" && u.roles != "1") ? <button type="button" className="btn btn-outline-danger btn-sm" value={u.userId} onClick={DeleteUser}>Delete</button> : ""}</td>
+                                        <td>{u.roles == "0" ? "Admin" : "Customer"}</td>
+                                        <td>{(u.status != "1" && u.roles != "0") ? <button type="button" className="btn btn-outline-danger btn-sm" value={u.userId} onClick={DeleteUser}>Delete</button> : ""}</td>
                                     </tr>)
                                 })}
                             </tbody>
@@ -236,10 +240,10 @@ function Users() {
                                 </ul>
                             </nav>
                         </div>
-                         
+
                     </div>
 
-                     
+
 
                 </div>
             </div>

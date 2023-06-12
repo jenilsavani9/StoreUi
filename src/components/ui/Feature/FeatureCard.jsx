@@ -3,6 +3,7 @@ import { CONTEXT_TYPE } from '../../../constants/constant'
 import { useStateValue } from '../../../contexts/StateProvider'
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import EditModal from './EditModal';
 
 
 function FeatureCard({ feature }) {
@@ -38,11 +39,14 @@ function FeatureCard({ feature }) {
     return (
         <div className='col-12 col-md-6 col-lg-4 mb-3 mb-sm-0'>
             <div className="card mt-4">
-                <h5 className="card-header">{feature.featuresName}</h5>
+                <h5 className="card-header">{feature.featureName}</h5>
                 <div className="card-body">
-                    <p className="card-text">{feature.featuresDescription}</p>
-                    <button className="btn btn-dark btn-sm" type='button'>Edit</button>
-                    <button className="btn btn-danger btn-sm ms-2" value={feature.featuresId} type='button' onClick={deleteFeature}>Delete</button>
+                    <p className="card-text">{feature.featureDescription}</p>
+                    <div className='d-flex'>
+                        <EditModal value={feature.featureId} />
+                        <button className="btn btn-danger btn-sm ms-2" value={feature.featureId} type='button' onClick={deleteFeature}>Delete</button>
+                    </div>
+
                 </div>
             </div>
         </div>

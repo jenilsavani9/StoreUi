@@ -63,7 +63,17 @@ function Store() {
                     <div className='mt-3'>
                         <div className="row">
                             {stores.length > 0 ? stores?.map((item, index) => {
-                                return <StoreCard GetStores={GetStores} key={index} storesId={item.storeId} storeName={item.storeName} status={item.status} address={item.address} cityName={item.cityName} countryName={item.countryName} locationLink={item.locationLink} />
+                                return <StoreCard 
+                                GetStores={GetStores} 
+                                key={index} 
+                                storesId={item.storeId} 
+                                storeName={item.storeName} 
+                                status={item.status} 
+                                addressLine1={item.addressLine1} 
+                                addressLine2={item.addressLine2}
+                                cityName={item.cityName} 
+                                countryName={item.countryName} 
+                                locationLink={item.locationLink} />
                             }) : <div>No Store Found</div>}
                         </div>
                     </div>
