@@ -27,7 +27,7 @@ function EditModal({ storesId }) {
 
     const [show, setShow] = useState(false);
 
-    const [ errors, setErrors ] = useState({})
+    const [errors, setErrors] = useState({})
 
     const handleClose = () => setShow(false);
     const handleShow = (event) => {
@@ -51,13 +51,13 @@ function EditModal({ storesId }) {
         const { storeName, addressLine1, postalCode } = modalStore
         const newErrors = {}
         // name errors
-        if ( !storeName || storeName === '' ) newErrors.storeName = 'cannot be blank!'
-        else if ( storeName.length > 50 ) newErrors.storeName = 'storeName is not valid!'
+        if (!storeName || storeName === '') newErrors.storeName = 'cannot be blank!'
+        else if (storeName.length > 50) newErrors.storeName = 'storeName is not valid!'
 
-        if(!addressLine1 || addressLine1 === '') newErrors.addressLine1 = "Address Line 1 is not valid!"
+        if (!addressLine1 || addressLine1 === '') newErrors.addressLine1 = "Address Line 1 is not valid!"
 
-        if(postalCode < 999) newErrors.postalCode = "Postal Code is not valid!"
-        
+        if (postalCode < 999) newErrors.postalCode = "Postal Code is not valid!"
+
         return newErrors
     }
 
@@ -126,7 +126,13 @@ function EditModal({ storesId }) {
                             <Form.Label>Location Link</Form.Label>
                             <Form.Control type="text" placeholder="" value={modalStore.locationLink} name='locationLink' onChange={changeHandler} />
                         </Form.Group>
-                        <Button variant="dark" type="submit">
+                        <Form.Select aria-label="Default select example" value={stores[0].cityName}>
+                            <option value={stores[0].cityName}></option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </Form.Select>
+                        <Button className='mt-3' variant="dark" type="submit">
                             Submit
                         </Button>
                     </Form>
