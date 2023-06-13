@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import 'bootstrap';
+import jwt_decode from "jwt-decode";
+
 
 import { MapLinkRegex } from '../../../constants/regex';
 import { useStateValue } from '../../../contexts/StateProvider';
@@ -39,13 +41,13 @@ function AddModal() {
     async function handleAddStoreSubmit(data, e) {
 
         try {
-
+            const decoded = jwt_decode(localStorage.getItem('token'));
             const response = await axios({
                 method: 'post',
                 url: `/api/store`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
                 data: {
-                    UserId: user.UserId,
+                    UserId: decoded.UserId,
                     StoreName: data.StoreName,
                     AddressLine1: data.AddressLine1,
                     AddressLine2: data.AddressLine2,

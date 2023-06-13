@@ -7,6 +7,8 @@ import StoreCard from '../components/ui/Store/StoreCard';
 import { useStateValue } from '../contexts/StateProvider';
 import AddModal from '../components/ui/Store/AddModal';
 import { CONTEXT_TYPE } from '../constants/constant';
+import { LoadFeature } from '../services/Features';
+import Spinner from '../components/ui/Ui/Spinner';
 
 
 function Store() {
@@ -19,28 +21,26 @@ function Store() {
     async function GetStores() {
         try {
             const decoded = jwt_decode(token);
-            SetUserInContext();
             const response = await axios({
                 method: 'get',
-                url: `https://localhost:44372/api/store?UserId=${decoded.UserId}`,
+                url: `/api/store?UserId=${decoded.UserId}`,
                 headers: { Authorization: `Bearer ${token}` },
             })
-            response.data.result.map(item => setTempStores(tempStores.push(item)))
+            response.data.result.map(async item => {
+                const StoreFeature = await axios({
+                    method: 'get',
+                    url: `/api/StoreFeature/Store?StoreId=${item.storeId}`,
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                item['StoreFeature'] = await StoreFeature.data.result;
+                setTempStores(tempStores.push(item))
+            })
             dispatch({
                 type: CONTEXT_TYPE.SET_STORES,
                 stores: tempStores
             })
         } catch (error) {
             console.log(error)
-        }
-    }
-
-    async function SetUserInContext() {
-        if (localStorage.getItem('token') != null) {
-            dispatch({
-                type: CONTEXT_TYPE.SET_USER,
-                user: await jwt_decode(localStorage.getItem('token'))
-            })
         }
     }
 
@@ -64,7 +64,6 @@ function Store() {
                         <div className="row">
                             {stores.length > 0 ? stores?.map((item, index) => {
                                 return <StoreCard 
-                                GetStores={GetStores} 
                                 key={index} 
                                 storesId={item.storeId} 
                                 storeName={item.storeName} 
@@ -73,8 +72,9 @@ function Store() {
                                 addressLine2={item.addressLine2}
                                 cityName={item.cityName} 
                                 countryName={item.countryName} 
-                                locationLink={item.locationLink} />
-                            }) : <div>No Store Found</div>}
+                                locationLink={item.locationLink}
+                                StoreFeature={item.StoreFeature} />
+                            }) : <div className='text-center'><Spinner /></div> }
                         </div>
                     </div>
                 </div>

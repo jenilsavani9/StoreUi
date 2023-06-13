@@ -35,7 +35,6 @@ function EmailValidation() {
                 method: 'get',
                 url: `/api/Login/validate?UserId=${userId}&token=${validateToken}`
             })
-            console.log(response)
             if (response.data.message == false) {
                 setValidateResponse(false)
                 swal.fire({

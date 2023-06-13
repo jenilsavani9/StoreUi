@@ -39,6 +39,7 @@ const reducer = (state, action) => {
         case 'EDIT_STORE':
             var editItem = state.stores?.map((item) => {
                 if (item.storeId == action.item.storeId) {
+                    action.item.StoreFeature = item.StoreFeature
                     return action.item
                 } else {
                     return item
@@ -91,6 +92,14 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 modalFeature: action.item
+            }
+        case 'CHANGE_STORE_FEATURE':
+            const index2 = state.stores.findIndex(
+                (item) => item.storeId == action.storesId
+            )
+            state.stores[index2].StoreFeature = action.item;
+            return {
+                ...state,
             }
         default:
             return state;

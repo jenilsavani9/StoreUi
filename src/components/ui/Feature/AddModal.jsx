@@ -6,6 +6,8 @@ import Form from 'react-bootstrap/Form';
 import jwt_decode from "jwt-decode";
 import { CONTEXT_TYPE } from '../../../constants/constant';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { useStateValue } from '../../../contexts/StateProvider'
 
@@ -49,6 +51,17 @@ function AddModal() {
                 type: CONTEXT_TYPE.ADD_FEATURE,
                 features: response.data.result[0]
             })
+            // toast
+            toast.success('🦄 Successfully Added!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                });
             setFeatureName("");
             setFeatureDescription("");
         } else {

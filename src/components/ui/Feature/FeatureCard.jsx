@@ -1,10 +1,12 @@
 import React from 'react'
-import { CONTEXT_TYPE } from '../../../constants/constant'
-import { useStateValue } from '../../../contexts/StateProvider'
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import EditModal from './EditModal';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+import EditModal from './EditModal';
+import { CONTEXT_TYPE } from '../../../constants/constant'
+import { useStateValue } from '../../../contexts/StateProvider'
 
 function FeatureCard({ feature }) {
 
@@ -27,6 +29,16 @@ function FeatureCard({ feature }) {
                     type: CONTEXT_TYPE.REMOVE_FEATURE,
                     features: response.data.result
                 })
+                toast.success('🦄 Successfully Deleted!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    });
 
             } else if (result.isDenied) {
                 Swal.fire('Changes are not saved', '', 'info')

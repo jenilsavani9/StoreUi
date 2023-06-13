@@ -1,23 +1,20 @@
 import React, { useEffect } from 'react'
+import jwt_decode from "jwt-decode";
+import axios from 'axios';
+
 import FeatureCard from '../components/ui/Feature/FeatureCard'
 import { useStateValue } from '../contexts/StateProvider'
-import axios from 'axios';
 import { CONTEXT_TYPE } from '../constants/constant';
-import jwt_decode from "jwt-decode";
 import AddModal from '../components/ui/Feature/AddModal';
+import { LoadFeature } from '../services/Features';
 
 function Services() {
 
     const [{ features }, dispatch] = useStateValue();
 
-    async function LoadFeature() {
+    async function LoadFeatures() {
         try {
-            const decoded = jwt_decode(localStorage.getItem('token'));
-            const response = await axios({
-                method: 'get',
-                url: `api/Feature?UserId=${decoded.UserId}`,
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-            })
+            const response = await LoadFeature()
             dispatch({
                 type: CONTEXT_TYPE.SET_FEATURE,
                 features: response.data.result
@@ -28,7 +25,7 @@ function Services() {
     }
 
     useEffect(() => {
-        LoadFeature();
+        LoadFeatures();
     }, [])
 
 

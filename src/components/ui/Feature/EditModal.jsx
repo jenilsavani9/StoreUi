@@ -4,8 +4,11 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import jwt_decode from "jwt-decode";
-import { CONTEXT_TYPE } from '../../../constants/constant';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+
+import { CONTEXT_TYPE } from '../../../constants/constant';
 import { useStateValue } from '../../../contexts/StateProvider';
 
 function EditModal({ value }) {
@@ -22,7 +25,6 @@ function EditModal({ value }) {
             const index = features.findIndex(
                 (item) => item.featureId == event.target.value
             )
-            console.log(features[index])
             setFeatureName(features[index]?.featureName)
             setFeatureDescription(features[index]?.featureDescription)
             setFeatureId(features[index]?.featureId)
@@ -57,6 +59,17 @@ function EditModal({ value }) {
                 type: CONTEXT_TYPE.EDIT_FEATURE,
                 item: response.data.result[0]
             })
+             // toast
+             toast.success('🦄 Successfully Updated!', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                });
             setFeatureName("");
             setFeatureDescription("");
         } else {
