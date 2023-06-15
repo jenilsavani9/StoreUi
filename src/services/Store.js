@@ -18,3 +18,12 @@ export const EditStore = async (editStore) => {
     })
     return response;
 }
+
+// function for file upload
+export const CSVUpload = async (formData) => {
+    for (var pair of formData.entries()) {
+        console.log(pair[0]+ ', ' + pair[1]); 
+    }
+    const response = await axios.post('/api/File/Upload', formData)
+    return response;
+}

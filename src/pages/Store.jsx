@@ -9,6 +9,7 @@ import AddModal from '../components/ui/Store/AddModal';
 import { CONTEXT_TYPE } from '../constants/constant';
 import { LoadFeature } from '../services/Features';
 import Spinner from '../components/ui/Ui/Spinner';
+import FileUpload from '../components/ui/Ui/FileUpload';
 
 
 function Store() {
@@ -56,7 +57,8 @@ function Store() {
             <div className='container'>
                 <div className="container">
                     <div className="d-flex justify-content-between mt-3">
-                        <h2>Stores</h2>
+                        <h2>Stores <FileUpload /></h2>
+                        
                         <AddModal />
                     </div>
 

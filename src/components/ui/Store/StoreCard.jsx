@@ -63,13 +63,13 @@ function StoreCard({ storesId,
                 <div className="card-body">
                     <div className='d-flex justify-content-between'>
                         <h5 className="card-title">{storeName}</h5>
-                        <div className="card-text">{status == true ? <span className="badge rounded-pill text-bg-success">Open</span> : <span className="badge rounded-pill text-bg-danger">Closed</span>}</div>
+                        {/* <div className="card-text">{status == true ? <span className="badge text-bg-success">Open</span> : <span className="badge rounded-pill text-bg-danger">Closed</span>}</div> */}
 
                     </div>
-                    <hr />
+                    
 
                     <div className="card-text text-body-tertiary">{`${(addressLine1 + addressLine2).substring(0, 40)}...`}</div>
-                    <hr />
+                    
                     <div className="d-flex justify-content-between">
                         <div className="card-text">{cityName}, {countryName}</div>
                         <div className="card-text"><a className='btn btn-secondary btn-sm' role='button' href={locationLink} target="_blank"><i className="bi bi-geo-alt-fill"></i> Map</a></div>
