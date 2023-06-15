@@ -9,17 +9,53 @@ import jwt_decode from "jwt-decode";
 
 import { CSVUpload } from '../../../services/Store'
 import { toast } from 'react-toastify';
+import axios from 'axios';
+import { useStateValue } from '../../../contexts/StateProvider';
+import { CONTEXT_TYPE } from '../../../constants/constant';
 
-function FileUpload() {
+function FileUpload({  }) {
     const [show, setShow] = useState(false);
+
+    const [{ stores }, dispatch] = useStateValue();
+    const [token, setToken] = useState(localStorage.getItem('token'));
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const [tempStores, setTempStores] = useState([]);
 
     const [file, setFile] = useState();
 
     const saveFile = (event) => {
         setFile(event.target.files[0])
+    }
+
+    async function GetStores() {
+        try {
+            var temp = [];
+            const decoded = jwt_decode(token);
+            const response = await axios({
+                method: 'get',
+                url: `/api/store?UserId=${decoded.UserId}`,
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            response.data.result.map(async item => {
+                const StoreFeature = await axios({
+                    method: 'get',
+                    url: `/api/StoreFeature/Store?StoreId=${item.storeId}`,
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                item['StoreFeature'] = await StoreFeature.data.result;
+                // setTempStores(tempStores.push(item))
+                temp.push(item);
+            })
+            dispatch({
+                type: CONTEXT_TYPE.SET_STORES,
+                stores: temp
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleSubmit = async (event) => {
@@ -30,6 +66,18 @@ function FileUpload() {
         formData.append("UserId", decoded.UserId)
         try {
             await CSVUpload(formData);
+            handleClose();
+            GetStores();
+            toast.success('🦄 Stores Added Successfully!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
         } catch (error) {
             // toast
             toast.error('🦄 Wrong file format!', {

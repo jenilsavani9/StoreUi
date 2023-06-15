@@ -58,7 +58,6 @@ function Store() {
                 <div className="container">
                     <div className="d-flex justify-content-between mt-3">
                         <h2>Stores <FileUpload /></h2>
-                        
                         <AddModal />
                     </div>
 
