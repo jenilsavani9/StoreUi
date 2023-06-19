@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import swal from 'sweetalert2';
 import { useDeviceSelectors } from 'react-device-detect';
 import jwt_decode from "jwt-decode";
+import { toast } from 'react-toastify';
 
 function Login() {
 
@@ -43,24 +44,40 @@ function Login() {
             } catch (error) {
             }
 
-            const response = await axios({
-                method: 'post',
-                url: `/api/Login`,
-                data: {
-                    emailId: email,
-                    password: password,
-                    LastLogin: JSON.stringify(LastLogin)
-                }
-            })
-            localStorage.setItem('token', response.data)
-            nav('/');
+            if (email == '') {
+                toast.error("🦄 Email Can't be null!", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    theme: "dark",
+                });
+            }else if(password == '' || password.length < 5) {
+                toast.error("🦄 Password is not valid!", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    theme: "dark",
+                });
+            } 
+            else {
+                const response = await axios({
+                    method: 'post',
+                    url: `/api/Login`,
+                    data: {
+                        emailId: email,
+                        password: password,
+                        LastLogin: JSON.stringify(LastLogin)
+                    }
+                })
+                localStorage.setItem('token', response.data)
+                nav('/');
+            }
+
+
         } catch (error) {
-            swal.fire({
-                title: 'Error!',
-                text: "Wrong Credentials!",
-                icon: 'error',
-                confirmButtonText: 'Cool'
-            })
+            toast.error('🦄 Some Error Occurred!', {
+                position: "top-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
         }
 
 

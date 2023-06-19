@@ -64,7 +64,7 @@ function Navbar() {
             <nav className="navbar navbar-dark navbar-expand-md bg-dark navbar-expand-lg" data-bs-theme="dark">
                 <div className="container container-fluid">
                     <Link to="/" className="navbar-brand">
-                        Stores
+                        LightSpeed
                     </Link>
                     <button
                         className="navbar-toggler"
@@ -79,7 +79,7 @@ function Navbar() {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item"><Link to="/" className="nav-link active">Home</Link></li>
+                            <li className="nav-item"><Link to="/" className="nav-link active">Stores</Link></li>
                             <li className="nav-item"><Link to="/features" className="nav-link active">Features</Link></li>
                             {admin ? <li className="nav-item"><Link to="/Users" className="nav-link active">Users</Link></li> : ""}
 

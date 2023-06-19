@@ -3,7 +3,7 @@ import axios from "axios"
 // function for edit store
 export const EditStore = async (editStore) => {
     const response = await axios({
-        method: 'post',
+        method: 'put',
         url: `/api/store/${editStore.storeId}`,
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         data: {

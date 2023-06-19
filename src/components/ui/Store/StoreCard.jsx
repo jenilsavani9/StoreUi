@@ -9,6 +9,7 @@ import EditModal from './EditModal';
 import { useStateValue } from '../../../contexts/StateProvider';
 import { CONTEXT_TYPE } from '../../../constants/constant';
 import FeaturesModal from './FeaturesModal';
+import { toast } from 'react-toastify';
 
 
 function StoreCard({ storesId,
@@ -36,7 +37,11 @@ function StoreCard({ storesId,
                 item: response.data.result
             })
         } catch (error) {
-            Swal.fire('Changes are not saved', '', 'error')
+            toast.error('🦄 Some Error Occurred!', {
+                position: "top-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
         }
     }
 
@@ -51,7 +56,11 @@ function StoreCard({ storesId,
                 reqForDeleteStore(event.target.value);
 
             } else if (result.isDenied) {
-                Swal.fire('Changes are not saved', '', 'info')
+                toast.error('🦄 Some Error Occurred!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    theme: "dark",
+                });
             }
         })
     }
@@ -68,7 +77,7 @@ function StoreCard({ storesId,
                     </div>
                     
 
-                    <div className="card-text text-body-tertiary">{`${(addressLine1 + addressLine2).substring(0, 40)}...`}</div>
+                    <div className="card-text text-body-tertiary">{(addressLine1 + addressLine2).length > 40 ? `${(addressLine1 + addressLine2).substring(0, 40)}...` : (addressLine1 + addressLine2) }{`${(addressLine1 + addressLine2).substring(0, 40)}...`}</div>
                     
                     <div className="d-flex justify-content-between">
                         <div className="card-text">{cityName}, {countryName}</div>

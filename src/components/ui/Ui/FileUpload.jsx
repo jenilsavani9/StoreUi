@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import Spinner from 'react-bootstrap/Spinner';
 import jwt_decode from "jwt-decode";
 
 
@@ -12,12 +11,14 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useStateValue } from '../../../contexts/StateProvider';
 import { CONTEXT_TYPE } from '../../../constants/constant';
+import { Table } from 'react-bootstrap';
 
-function FileUpload({  }) {
+function FileUpload({ }) {
     const [show, setShow] = useState(false);
 
     const [{ stores }, dispatch] = useStateValue();
     const [token, setToken] = useState(localStorage.getItem('token'));
+    const [loadStores, setLoadStores] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -30,33 +31,44 @@ function FileUpload({  }) {
         setFile(event.target.files[0])
     }
 
-    async function GetStores() {
-        try {
-            var temp = [];
-            const decoded = jwt_decode(token);
-            const response = await axios({
-                method: 'get',
-                url: `/api/store?UserId=${decoded.UserId}`,
-                headers: { Authorization: `Bearer ${token}` },
-            })
-            response.data.result.map(async item => {
-                const StoreFeature = await axios({
+
+        const fetchData = async () => {
+            try {
+                
+                const decoded = jwt_decode(token);
+                const response = await axios({
                     method: 'get',
-                    url: `/api/StoreFeature/Store?StoreId=${item.storeId}`,
+                    url: `/api/store?UserId=${decoded.UserId}`,
                     headers: { Authorization: `Bearer ${token}` },
-                })
-                item['StoreFeature'] = await StoreFeature.data.result;
-                // setTempStores(tempStores.push(item))
-                temp.push(item);
-            })
-            dispatch({
-                type: CONTEXT_TYPE.SET_STORES,
-                stores: temp
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }
+                });
+                const tempStoresData = await Promise.all(
+                    response.data.result.map(async (item) => {
+                        const StoreFeature = await axios({
+                            method: 'get',
+                            url: `/api/StoreFeature/Store?StoreId=${item.storeId}`,
+                            headers: { Authorization: `Bearer ${token}` },
+                        });
+
+                        item['StoreFeature'] = StoreFeature.data.result;
+                        return item;
+                    })
+                );
+
+                dispatch({ type: CONTEXT_TYPE.SET_STORES, stores: [] });
+                setTempStores(tempStores.concat(tempStoresData));
+                dispatch({
+                    type: CONTEXT_TYPE.SET_STORES,
+                    stores: tempStores.concat(tempStoresData),
+                });
+                setTempStores([])
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        
+
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -67,31 +79,25 @@ function FileUpload({  }) {
         try {
             await CSVUpload(formData);
             handleClose();
-            GetStores();
+            fetchData();
+            setLoadStores(true);
             toast.success('🦄 Stores Added Successfully!', {
                 position: "top-right",
                 autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
                 theme: "dark",
             });
         } catch (error) {
             // toast
+            setLoadStores(false);
             toast.error('🦄 Wrong file format!', {
                 position: "top-right",
                 autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
                 theme: "dark",
             });
         }
+        
     }
+
 
     return (
         <>
@@ -104,10 +110,33 @@ function FileUpload({  }) {
                     <Modal.Title>Add Store with CSV File</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <p>Sample File Format:</p>
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th>StoreName</th>
+                                <th>CityName</th>
+                                <th>AddressLine1</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Bugatti</td>
+                                <td>Los Angeles</td>
+                                <td>8833 W Olympic Blvd</td>
+                            </tr>
+                            {/* <tr>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                            </tr> */}
+
+                        </tbody>
+                    </Table>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="formFile" className="mb-3">
-                            <Form.Label>Upload Csv Files Only</Form.Label>
-                            <Form.Control type="file" onChange={saveFile} fileTypes={'.csv'} />
+                            {/* <Form.Label>Upload Csv Files Only</Form.Label> */}
+                            <Form.Control type="file" onChange={saveFile} filetypes={'.csv'} />
                         </Form.Group>
                         <Button variant="dark" type="submit">
                             Submit

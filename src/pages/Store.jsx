@@ -21,29 +21,34 @@ function Store() {
 
     async function GetStores() {
         try {
-            const decoded = jwt_decode(token);
-            const response = await axios({
-                method: 'get',
-                url: `/api/store?UserId=${decoded.UserId}`,
-                headers: { Authorization: `Bearer ${token}` },
-            })
-            response.data.result.map(async item => {
-                const StoreFeature = await axios({
-                    method: 'get',
-                    url: `/api/StoreFeature/Store?StoreId=${item.storeId}`,
-                    headers: { Authorization: `Bearer ${token}` },
-                })
-                item['StoreFeature'] = await StoreFeature.data.result;
-                setTempStores(tempStores.push(item))
-            })
-            dispatch({
-                type: CONTEXT_TYPE.SET_STORES,
-                stores: tempStores
-            })
+          const decoded = jwt_decode(token);
+          const response = await axios({
+            method: 'get',
+            url: `/api/store?UserId=${decoded.UserId}`,
+            headers: { Authorization: `Bearer ${token}` },
+          });
+      
+          const storesData = response.data.result.map(async item => {
+            const StoreFeature = await axios({
+              method: 'get',
+              url: `/api/StoreFeature/Store?StoreId=${item.storeId}`,
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            item['StoreFeature'] = StoreFeature.data.result;
+            return item;
+          });
+      
+          const updatedStores = await Promise.all(storesData);
+      
+          dispatch({
+            type: CONTEXT_TYPE.SET_STORES,
+            stores: updatedStores
+          });
         } catch (error) {
-            console.log(error)
+          console.log(error);
         }
-    }
+      }
+      
 
     useEffect(() => {
 
@@ -75,7 +80,7 @@ function Store() {
                                 countryName={item.countryName} 
                                 locationLink={item.locationLink}
                                 StoreFeature={item.StoreFeature} />
-                            }) : <div className='text-center'><Spinner /></div> }
+                            }) : <div className='text-center'>No Store Found</div> }
                         </div>
                     </div>
                 </div>

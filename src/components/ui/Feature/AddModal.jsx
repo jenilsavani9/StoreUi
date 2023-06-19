@@ -25,7 +25,7 @@ function AddModal() {
     const [featureName, setFeatureName] = useState("");
     const [featureDescription, setFeatureDescription] = useState("");
 
-    const [{  }, dispatch] = useStateValue();
+    const [{ }, dispatch] = useStateValue();
 
 
     const handleSubmit = async (event) => {
@@ -61,7 +61,7 @@ function AddModal() {
                 draggable: true,
                 progress: undefined,
                 theme: "dark",
-                });
+            });
             setFeatureName("");
             setFeatureDescription("");
         } else {
@@ -93,7 +93,7 @@ function AddModal() {
                             <Form.Label>Feature Description</Form.Label>
                             <Form.Control as="textarea" rows={3} value={featureDescription} onChange={e => setFeatureDescription(e.target.value)} />
                         </Form.Group>
-                        
+
                         <Button variant="dark" type="submit">
                             Submit
                         </Button>

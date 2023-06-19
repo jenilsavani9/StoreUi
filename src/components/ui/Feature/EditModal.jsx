@@ -21,7 +21,7 @@ function EditModal({ value }) {
 
     const handleClose = () => setShow(false);
     const handleShow = (event) => {
-        if(features != null) {
+        if (features != null) {
             const index = features.findIndex(
                 (item) => item.featureId == event.target.value
             )
@@ -34,7 +34,7 @@ function EditModal({ value }) {
 
     const [validated, setValidated] = useState(false);
 
-    
+
 
 
     const handleSubmit = async (event) => {
@@ -46,7 +46,7 @@ function EditModal({ value }) {
             const decoded = jwt_decode(localStorage.getItem('token'));
             const response = await axios({
                 method: 'put',
-                url: `/api/feature`,
+                url: `/api/feature/${featureId}`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
                 data: {
                     featuresId: featureId,
@@ -59,8 +59,8 @@ function EditModal({ value }) {
                 type: CONTEXT_TYPE.EDIT_FEATURE,
                 item: response.data.result[0]
             })
-             // toast
-             toast.success('🦄 Successfully Updated!', {
+            // toast
+            toast.success('🦄 Successfully Updated!', {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -69,7 +69,7 @@ function EditModal({ value }) {
                 draggable: true,
                 progress: undefined,
                 theme: "dark",
-                });
+            });
             setFeatureName("");
             setFeatureDescription("");
         } else {

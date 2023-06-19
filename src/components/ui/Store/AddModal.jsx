@@ -9,6 +9,7 @@ import jwt_decode from "jwt-decode";
 import { MapLinkRegex } from '../../../constants/regex';
 import { useStateValue } from '../../../contexts/StateProvider';
 import { CONTEXT_TYPE } from '../../../constants/constant';
+import { toast } from 'react-toastify';
 
 function AddModal() {
 
@@ -63,23 +64,21 @@ function AddModal() {
                 type: CONTEXT_TYPE.ADD_STORES,
                 store: response.data.result[0]
             })
-            Swal.fire({
-                title: 'Success',
-                text: "Store Added Successfully",
-                icon: 'success',
-                confirmButtonText: 'Cool'
-            })
+            toast.success('🦄 Stores Added Successfully!', {
+                position: "top-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
             
             CloseRef.current.click()
             e.target.reset();
         } catch (error) {
             console.log(error)
-            Swal.fire({
-                title: 'Error!',
-                text: "Some Error Occure",
-                icon: 'error',
-                confirmButtonText: 'Cool'
-            })
+            toast.error('🦄 some error Occurred!', {
+                position: "top-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
         }
 
     }

@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2';
 import { BASE_URL } from '../../../constants/regex';
+import { toast } from 'react-toastify';
 
 function ResetPassword(sendEmailToResetPass) {
 
@@ -34,19 +35,17 @@ function ResetPassword(sendEmailToResetPass) {
     async function onHandleSubmit(event) {
         event.preventDefault();
         if (newPass != conPass) {
-            swal.fire({
-                title: 'Error!',
-                text: "New Password and Confirm password must be same!",
-                icon: 'error',
-                confirmButtonText: 'Cool'
-            })
-        } else if(newPass != tempPass ) {
-            swal.fire({
-                title: 'Error!',
-                text: "New Password and Old password must be different!",
-                icon: 'error',
-                confirmButtonText: 'Cool'
-            })
+            toast.error('🦄 New Password and Confirm password must be same!', {
+                position: "top-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
+        } else if(newPass == tempPass ) {
+            toast.error('🦄 New Password and Old password must be different!', {
+                position: "top-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
         }
         else {
             try {
@@ -73,20 +72,18 @@ function ResetPassword(sendEmailToResetPass) {
                         nav('/login');
                     })
                 } else {
-                    swal.fire({
-                        title: 'Error!',
-                        text: "Some Error Occur",
-                        icon: 'error',
-                        confirmButtonText: 'Cool'
-                    })
+                    toast.error('🦄 Some Error Occurred!', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        theme: "dark",
+                    });
                 }
             } catch (error) {
-                swal.fire({
-                    title: 'Error!',
-                    text: "Some Error Occur",
-                    icon: 'error',
-                    confirmButtonText: 'Cool'
-                })
+                toast.error('🦄 Some Error Occurred!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    theme: "dark",
+                });
             }
         }
 

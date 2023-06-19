@@ -8,6 +8,7 @@ import swal from 'sweetalert2';
 import { BASE_URL } from '../constants/regex';
 import FormError from '../components/ui/User/FormError';
 import { Pagination } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 function Users() {
 
@@ -49,12 +50,11 @@ function Users() {
         try {
             setToken(localStorage.getItem('token'));
         } catch (error) {
-            swal.fire({
-                title: 'Error!',
-                text: "User Not Valid!",
-                icon: 'error',
-                confirmButtonText: 'Cool'
-            })
+            toast.error('🦄 User Not Valid!', {
+                position: "top-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
         }
 
         try {
@@ -84,12 +84,11 @@ function Users() {
             nav('/Users');
             LoadUsersData();
         } catch (error) {
-            // swal.fire({
-            //     title: 'Error!',
-            //     text: error.response.data,
-            //     icon: 'error',
-            //     confirmButtonText: 'Cool'
-            // })
+            toast.error('🦄 Wrong Credentials!', {
+                position: "top-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
         }
         setLoader(false);
     }
@@ -97,8 +96,8 @@ function Users() {
     async function LoadUsersData() {
         try {
             const response = await axios({
-                method: 'post',
-                url: `/api/Admin/User/Get?pageIndex=${pageIndex}&search=j`,
+                method: 'get',
+                url: `/api/Admin/User/Get?pageIndex=${pageIndex}`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             })
             setUsers(response.data.result)
@@ -122,7 +121,7 @@ function Users() {
     async function DeleteUser(event) {
         try {
             const response = await axios({
-                method: 'post',
+                method: 'delete',
                 url: `/api/Admin/User/Delete?userId=${event.target.value}`,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             })

@@ -22,7 +22,7 @@ function FeatureCard({ feature }) {
             if (result.isConfirmed) {
                 const response = await axios({
                     method: 'delete',
-                    url: `/api/feature?FeatureId=${event.target.value}`,
+                    url: `/api/feature/${event.target.value}`,
                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
                 })
                 dispatch({
