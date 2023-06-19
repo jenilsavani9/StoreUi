@@ -1,9 +1,9 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import "../App.css";
 import ResetPassword from '../components/ui/User/ResetPassword';
 import swal from 'sweetalert2';
+import { ValidateUserEmailService } from '../services/User';
 
 function EmailValidation() {
 
@@ -31,10 +31,8 @@ function EmailValidation() {
 
     async function ValidateEmailRequest() {
         try {
-            const response = await axios({
-                method: 'get',
-                url: `/api/Login/validate?UserId=${userId}&token=${validateToken}`
-            })
+            const response = await ValidateUserEmailService(userId, validateToken)
+
             if (response.data.message == false) {
                 setValidateResponse(false)
                 swal.fire({

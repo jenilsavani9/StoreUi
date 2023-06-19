@@ -1,65 +1,39 @@
 import React, { useState, useRef } from 'react'
-import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import Swal from 'sweetalert2';
 import 'bootstrap';
 import jwt_decode from "jwt-decode";
-
+import { toast } from 'react-toastify';
 
 import { MapLinkRegex } from '../../../constants/regex';
 import { useStateValue } from '../../../contexts/StateProvider';
 import { CONTEXT_TYPE } from '../../../constants/constant';
-import { toast } from 'react-toastify';
+import { AddStoreService, StoreLocationService } from '../../../services/Store';
 
 function AddModal() {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const [{ user, stores }, dispatch] = useStateValue();
-
-    const [tempStore, setTempStore] = useState([]);
+    const [{  }, dispatch] = useStateValue();
 
     //dropdown list
     const [cityList, setCityList] = useState();
     const [stateList, setStateList] = useState();
     const [countryList, setCountryList] = useState();
 
-    // state for dispaying modal 
-
     const CloseRef = useRef();
 
     async function LocationData() {
-        const response = await axios({
-            method: 'get',
-            url: `/api/store/locations`,
-        })
+        const response = await StoreLocationService();
         setCityList(response.data.cities)
         setCountryList(response.data.countries)
         setStateList(response.data.states)
-       
     }
 
     async function handleAddStoreSubmit(data, e) {
 
         try {
             const decoded = jwt_decode(localStorage.getItem('token'));
-            const response = await axios({
-                method: 'post',
-                url: `/api/store`,
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-                data: {
-                    UserId: decoded.UserId,
-                    StoreName: data.StoreName,
-                    AddressLine1: data.AddressLine1,
-                    AddressLine2: data.AddressLine2,
-                    CountryId: data.Country,
-                    StateId: data.State,
-                    CityId: data.City,
-                    PostalCode: data.PostalCode,
-                    LocationLink: data.LocationLink,
-                    Status: "active"
-                }
-            })
+            const response = await AddStoreService(data, decoded.UserId)
             dispatch({
                 type: CONTEXT_TYPE.ADD_STORES,
                 store: response.data.result[0]
@@ -69,7 +43,6 @@ function AddModal() {
                 autoClose: 5000,
                 theme: "dark",
             });
-            
             CloseRef.current.click()
             e.target.reset();
         } catch (error) {
@@ -80,19 +53,16 @@ function AddModal() {
                 theme: "dark",
             });
         }
-
     }
 
     // for filter city and states
     const [ct, setCt] = useState();
     const [cs, setCs] = useState();
     const FilterState = (event) => {
-
         setCs(event.target.value);
     }
 
     const FilterCity = (event) => {
-
         setCt(event.target.value);
     }
 

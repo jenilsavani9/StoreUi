@@ -4,21 +4,20 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import jwt_decode from "jwt-decode";
-
-
-import { CSVUpload } from '../../../services/Store'
+import { Table } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import axios from 'axios';
+
+
+import { CSVUpload, GetFeaturesByStoreId, GetStoresByUserId } from '../../../services/Store'
 import { useStateValue } from '../../../contexts/StateProvider';
 import { CONTEXT_TYPE } from '../../../constants/constant';
-import { Table } from 'react-bootstrap';
+
 
 function FileUpload({ }) {
     const [show, setShow] = useState(false);
 
     const [{ stores }, dispatch] = useStateValue();
     const [token, setToken] = useState(localStorage.getItem('token'));
-    const [loadStores, setLoadStores] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -32,43 +31,30 @@ function FileUpload({ }) {
     }
 
 
-        const fetchData = async () => {
-            try {
-                
-                const decoded = jwt_decode(token);
-                const response = await axios({
-                    method: 'get',
-                    url: `/api/store?UserId=${decoded.UserId}`,
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                const tempStoresData = await Promise.all(
-                    response.data.result.map(async (item) => {
-                        const StoreFeature = await axios({
-                            method: 'get',
-                            url: `/api/StoreFeature/Store?StoreId=${item.storeId}`,
-                            headers: { Authorization: `Bearer ${token}` },
-                        });
+    const fetchData = async () => {
+        try {
 
-                        item['StoreFeature'] = StoreFeature.data.result;
-                        return item;
-                    })
-                );
+            const decoded = jwt_decode(token);
+            const response = await GetStoresByUserId(decoded.UserId, token);
+            const tempStoresData = await Promise.all(
+                response.data.result.map(async (item) => {
+                    const StoreFeature = await GetFeaturesByStoreId(item.storeId, token);
+                    item['StoreFeature'] = StoreFeature.data.result;
+                    return item;
+                })
+            );
 
-                dispatch({ type: CONTEXT_TYPE.SET_STORES, stores: [] });
-                setTempStores(tempStores.concat(tempStoresData));
-                dispatch({
-                    type: CONTEXT_TYPE.SET_STORES,
-                    stores: tempStores.concat(tempStoresData),
-                });
-                setTempStores([])
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        
-
-
+            dispatch({ type: CONTEXT_TYPE.SET_STORES, stores: [] });
+            setTempStores(tempStores.concat(tempStoresData));
+            dispatch({
+                type: CONTEXT_TYPE.SET_STORES,
+                stores: tempStores.concat(tempStoresData),
+            });
+            setTempStores([])
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -80,22 +66,18 @@ function FileUpload({ }) {
             await CSVUpload(formData);
             handleClose();
             fetchData();
-            setLoadStores(true);
             toast.success('🦄 Stores Added Successfully!', {
                 position: "top-right",
                 autoClose: 5000,
                 theme: "dark",
             });
         } catch (error) {
-            // toast
-            setLoadStores(false);
             toast.error('🦄 Wrong file format!', {
                 position: "top-right",
                 autoClose: 5000,
                 theme: "dark",
             });
         }
-        
     }
 
 
@@ -125,17 +107,10 @@ function FileUpload({ }) {
                                 <td>Los Angeles</td>
                                 <td>8833 W Olympic Blvd</td>
                             </tr>
-                            {/* <tr>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr> */}
-
                         </tbody>
                     </Table>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="formFile" className="mb-3">
-                            {/* <Form.Label>Upload Csv Files Only</Form.Label> */}
                             <Form.Control type="file" onChange={saveFile} filetypes={'.csv'} />
                         </Form.Group>
                         <Button variant="dark" type="submit">

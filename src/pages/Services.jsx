@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react'
-import jwt_decode from "jwt-decode";
-import axios from 'axios';
 
 import FeatureCard from '../components/ui/Feature/FeatureCard'
 import { useStateValue } from '../contexts/StateProvider'

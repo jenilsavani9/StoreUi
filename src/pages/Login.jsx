@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import swal from 'sweetalert2';
 import { useDeviceSelectors } from 'react-device-detect';
 import jwt_decode from "jwt-decode";
 import { toast } from 'react-toastify';
+import { GetUserInfoData, LoginResponse } from '../services/User';
 
 function Login() {
 
@@ -30,10 +30,7 @@ function Login() {
         try {
             var LastLogin = {}
             try {
-                const DeviceInfo = await axios({
-                    method: 'get',
-                    url: 'https://geolocation-db.com/json/',
-                })
+                const DeviceInfo = await GetUserInfoData();
                 const date = new Date();
                 LastLogin = {
                     // "osName": osName,
@@ -58,15 +55,7 @@ function Login() {
                 });
             } 
             else {
-                const response = await axios({
-                    method: 'post',
-                    url: `/api/Login`,
-                    data: {
-                        emailId: email,
-                        password: password,
-                        LastLogin: JSON.stringify(LastLogin)
-                    }
-                })
+                const response = await LoginResponse(email, password, JSON.stringify(LastLogin))
                 localStorage.setItem('token', response.data)
                 nav('/');
             }

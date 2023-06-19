@@ -1,12 +1,12 @@
 import React from 'react'
-import axios from 'axios';
 import Swal from 'sweetalert2';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import EditModal from './EditModal';
 import { CONTEXT_TYPE } from '../../../constants/constant'
 import { useStateValue } from '../../../contexts/StateProvider'
+import { DeleteFeatureService } from '../../../services/Features';
 
 function FeatureCard({ feature }) {
 
@@ -20,11 +20,7 @@ function FeatureCard({ feature }) {
             confirmButtonText: 'Delete',
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const response = await axios({
-                    method: 'delete',
-                    url: `/api/feature/${event.target.value}`,
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-                })
+                const response = await DeleteFeatureService(event.target.value)
                 dispatch({
                     type: CONTEXT_TYPE.REMOVE_FEATURE,
                     features: response.data.result
@@ -32,16 +28,15 @@ function FeatureCard({ feature }) {
                 toast.success('🦄 Successfully Deleted!', {
                     position: "top-right",
                     autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
                     theme: "dark",
-                    });
+                });
 
             } else if (result.isDenied) {
-                Swal.fire('Changes are not saved', '', 'info')
+                toast.error('🦄 Some Error Occurred!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    theme: "dark",
+                });
             }
         })
 
@@ -58,7 +53,6 @@ function FeatureCard({ feature }) {
                         <EditModal value={feature.featureId} />
                         <button className="btn btn-danger btn-sm ms-2" value={feature.featureId} type='button' onClick={deleteFeature}>Delete</button>
                     </div>
-
                 </div>
             </div>
         </div>

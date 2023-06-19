@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
 
 import { useStateValue } from '../../../contexts/StateProvider';
 import { LoadFeature } from '../../../services/Features';

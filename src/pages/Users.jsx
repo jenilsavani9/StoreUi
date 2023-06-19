@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from "../components/layout/Navbar";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import axios from 'axios'
 import jwtDecode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import swal from 'sweetalert2';
-import { BASE_URL } from '../constants/regex';
-import FormError from '../components/ui/User/FormError';
-import { Pagination } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+
+import FormError from '../components/ui/User/FormError';
+import { AddUsers, DeleteUsers, GetUsers } from '../services/User';
 
 function Users() {
 
@@ -58,29 +55,17 @@ function Users() {
         }
 
         try {
-
-            const response = await axios({
-                method: 'post',
-                url: `/api/Admin/User/Add`,
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-                data: {
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    password: password
-                }
-            })
+            const response = await AddUsers(firstName, lastName, email, password);
             setFirstName("");
             setLastName("");
             setEmail("");
             setPassword("");
 
-            swal.fire({
-                title: 'Success',
-                text: "User Added",
-                icon: 'success',
-                confirmButtonText: 'Ok'
-            })
+            toast.success('🦄 User Added successfully!', {
+                position: "top-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
             nav('/Users');
             LoadUsersData();
         } catch (error) {
@@ -95,11 +80,7 @@ function Users() {
 
     async function LoadUsersData() {
         try {
-            const response = await axios({
-                method: 'get',
-                url: `/api/Admin/User/Get?pageIndex=${pageIndex}`,
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-            })
+            const response = await GetUsers(pageIndex)
             setUsers(response.data.result)
             setUserCount(response.data.userCount)
         } catch (error) {
@@ -120,11 +101,7 @@ function Users() {
 
     async function DeleteUser(event) {
         try {
-            const response = await axios({
-                method: 'delete',
-                url: `/api/Admin/User/Delete?userId=${event.target.value}`,
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-            })
+            const response = await DeleteUsers(event.target.value);
             LoadUsersData();
         } catch (error) {
             console.log(error)

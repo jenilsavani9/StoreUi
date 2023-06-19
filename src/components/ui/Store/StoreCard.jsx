@@ -1,15 +1,13 @@
-import axios from 'axios';
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from 'react'
 import Swal from 'sweetalert2'
 import Badge from 'react-bootstrap/Badge';
-
+import { toast } from 'react-toastify';
 
 import EditModal from './EditModal';
 import { useStateValue } from '../../../contexts/StateProvider';
 import { CONTEXT_TYPE } from '../../../constants/constant';
 import FeaturesModal from './FeaturesModal';
-import { toast } from 'react-toastify';
+import { DeleteStoreService } from '../../../services/Store';
 
 
 function StoreCard({ storesId,
@@ -25,13 +23,9 @@ function StoreCard({ storesId,
     const [{ }, dispatch] = useStateValue();
 
     // func for delete store
-    const reqForDeleteStore = async (data) => {
+    const reqForDeleteStore = async (storeId) => {
         try {
-            const response = await axios({
-                method: 'delete',
-                url: `/api/store/${data}`,
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-            })
+            const response = await DeleteStoreService(storeId)
             dispatch({
                 type: CONTEXT_TYPE.REMOVE_STORE,
                 item: response.data.result

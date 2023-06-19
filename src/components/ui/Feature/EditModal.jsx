@@ -4,12 +4,12 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import jwt_decode from "jwt-decode";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
 
 import { CONTEXT_TYPE } from '../../../constants/constant';
 import { useStateValue } from '../../../contexts/StateProvider';
+import { EditFeatureService } from '../../../services/Features';
 
 function EditModal({ value }) {
 
@@ -18,6 +18,7 @@ function EditModal({ value }) {
     const [featureId, setFeatureId] = useState();
     const [featureName, setFeatureName] = useState("");
     const [featureDescription, setFeatureDescription] = useState("");
+    const [validated, setValidated] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = (event) => {
@@ -32,10 +33,6 @@ function EditModal({ value }) {
         setShow(true);
     }
 
-    const [validated, setValidated] = useState(false);
-
-
-
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -44,17 +41,8 @@ function EditModal({ value }) {
             handleClose();
 
             const decoded = jwt_decode(localStorage.getItem('token'));
-            const response = await axios({
-                method: 'put',
-                url: `/api/feature/${featureId}`,
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-                data: {
-                    featuresId: featureId,
-                    userId: decoded.UserId,
-                    featuresName: featureName,
-                    featuresDescription: featureDescription
-                }
-            })
+            const response = await EditFeatureService(featureId, decoded.UserId, featureName, featureDescription)
+
             dispatch({
                 type: CONTEXT_TYPE.EDIT_FEATURE,
                 item: response.data.result[0]
@@ -63,11 +51,6 @@ function EditModal({ value }) {
             toast.success('🦄 Successfully Updated!', {
                 position: "top-right",
                 autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
                 theme: "dark",
             });
             setFeatureName("");
