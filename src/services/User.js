@@ -3,7 +3,7 @@ import axios from "axios"
 export const LoginResponse = async (email, password, LastLogin) => {
     const response = await axios({
         method: 'post',
-        url: `/api/Login`,
+        url: `/api/User/Login`,
         data: {
             emailId: email,
             password: password,

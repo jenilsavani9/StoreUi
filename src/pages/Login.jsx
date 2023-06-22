@@ -6,6 +6,7 @@ import { useDeviceSelectors } from 'react-device-detect';
 import jwt_decode from "jwt-decode";
 import { toast } from 'react-toastify';
 import { GetUserInfoData, LoginResponse } from '../services/User';
+import Spinners from '../components/ui/Ui/Spinner';
 
 function Login() {
 
@@ -16,6 +17,8 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const changeInputPassword = (event) => {
         setPassword(event.target.value)
     }
@@ -24,10 +27,34 @@ function Login() {
         setEmail(event.target.value)
     }
 
+    useEffect(() => {
+        var token = localStorage.getItem("token");
+        if (token != null) {
+            nav('/')
+        }
+    }, [])
+
+
     const SubmitLoginForm = async (event) => {
         event.preventDefault();
+        setIsLoading(true);
         // const { osName, browserName } = selectors;
-        try {
+
+        if (email == '') {
+            toast.error("🦄 Email Can't be null!", {
+                position: "top-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
+        }
+        if (password == '' || password.length < 5) {
+            toast.error("🦄 Password is not valid!", {
+                position: "top-right",
+                autoClose: 5000,
+                theme: "dark",
+            });
+        }
+        else {
             var LastLogin = {}
             try {
                 const DeviceInfo = await GetUserInfoData();
@@ -41,34 +68,30 @@ function Login() {
             } catch (error) {
             }
 
-            if (email == '') {
-                toast.error("🦄 Email Can't be null!", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    theme: "dark",
-                });
-            }else if(password == '' || password.length < 5) {
-                toast.error("🦄 Password is not valid!", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    theme: "dark",
-                });
-            } 
-            else {
+            try {
                 const response = await LoginResponse(email, password, JSON.stringify(LastLogin))
-                localStorage.setItem('token', response.data)
-                nav('/');
+                if (response.data.status == 200) {
+                    localStorage.setItem('token', response.data.payload.token)
+                    localStorage.setItem('FirstName', response.data.payload.user.firstName)
+                    localStorage.setItem('LastName', response.data.payload.user.lastName)
+                    localStorage.setItem('UserId', response.data.payload.user.id)
+                    nav('/');
+                }
+            } catch (error) {
+                toast.error("🦄 Invalid Credentials", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    theme: "dark",
+                });
             }
 
 
-        } catch (error) {
-            toast.error('🦄 Some Error Occurred!', {
-                position: "top-right",
-                autoClose: 5000,
-                theme: "dark",
-            });
         }
 
+
+
+
+        setIsLoading(false);
 
     }
 
@@ -87,7 +110,7 @@ function Login() {
                     <input type="password" className="form-control" id="exampleInputPassword1" value={password} onChange={changeInputPassword} />
                 </div>
                 <div>
-                    <button onClick={SubmitLoginForm} type="button" className="btn btn-dark px-3">Submit</button>
+                    {isLoading ? <Spinners /> : <button onClick={SubmitLoginForm} type="button" className="btn btn-dark px-3">Submit</button>}
                 </div>
 
             </form>

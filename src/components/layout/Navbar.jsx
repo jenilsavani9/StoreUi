@@ -34,21 +34,19 @@ function Navbar() {
         try {
             checkTokenExpirationMiddleware();
             setToken(localStorage.getItem('token'))
-            const decoded = jwt_decode(token);
-
-            setFirstName(decoded.FirstName);
-            setLastName(decoded.LastName);
+            setFirstName(localStorage.getItem('FirstName'));
+            setLastName(localStorage.getItem('LastName'));
             // setLastLogin(JSON.parse(decoded.lastLogin));
-            if (decoded.role == "admin") {
-                setAdmin(true)
-            }
+            // if (decoded.role == "admin") {
+            //     setAdmin(true)
+            // }
         } catch (error) {
             nav('/login');
         }
     }, [])
 
     const LogoutUser = () => {
-        localStorage.removeItem('token');
+        localStorage.clear();
         nav('/login')
     }
 
