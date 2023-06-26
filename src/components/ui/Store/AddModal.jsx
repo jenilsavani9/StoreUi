@@ -24,19 +24,19 @@ function AddModal() {
 
     async function LocationData() {
         const response = await StoreLocationService();
-        setCityList(response.data.cities)
-        setCountryList(response.data.countries)
-        setStateList(response.data.states)
+        setCityList(response.data.locations.cities)
+        setCountryList(response.data.locations.countries)
+        setStateList(response.data.locations.states)
     }
 
     async function handleAddStoreSubmit(data, e) {
 
         try {
-            const decoded = jwt_decode(localStorage.getItem('token'));
-            const response = await AddStoreService(data, decoded.UserId)
+            const UserId = localStorage.getItem('UserId');
+            const response = await AddStoreService(data, UserId)
             dispatch({
                 type: CONTEXT_TYPE.ADD_STORES,
-                store: response.data.result[0]
+                store: response.data.payload[0]
             })
             toast.success('🦄 Stores Added Successfully!', {
                 position: "top-right",
@@ -114,7 +114,7 @@ function AddModal() {
                                         <label htmlFor="validationCustom06" className="form-label">Country*</label>
                                         <select className="form-control" {...register("Country", { required: true })} onClick={LocationData} onChange={FilterState} id='country-select'>
                                             {!countryList ? <option value={""}>Select Country</option> : countryList.map((item, index) => {
-                                                return (<option value={item.countryId} key={index}>{item.countryName}</option>)
+                                                return (<option value={item.id} key={index}>{item.name}</option>)
                                             })}
                                         </select>
                                         <div className="text-danger">{errors.Country?.type === 'required' && <p role="alert">Country is required</p>}</div>
@@ -124,7 +124,7 @@ function AddModal() {
                                         <label htmlFor="validationCustom06" className="form-label">State*</label>
                                         <select className="form-control" {...register("State", { required: true })} onChange={FilterCity} onClick={FilterCity}>
                                             {!cs ? "" : stateList.map((item, index) => {
-                                                return (cs == item.countryId ? <option value={item.stateId} key={index}>{item.stateName}</option> : "")
+                                                return (cs == item.countryId ? <option value={item.id} key={index}>{item.name}</option> : "")
                                             })}
                                         </select>
                                         <div className="text-danger">{errors.State?.type === 'required' && <p role="alert">State is required</p>}</div>
@@ -134,7 +134,7 @@ function AddModal() {
                                         <label htmlFor="validationCustom06" className="form-label">City*</label>
                                         <select className="form-control" {...register("City", { required: true })}>
                                             {!ct ? "" : cityList.map((item, index) => {
-                                                return (ct == item.stateId ? <option value={item.cityId} key={index}>{item.cityName}</option> : "")
+                                                return (ct == item.stateId ? <option value={item.id} key={index}>{item.name}</option> : "")
                                             })}
                                         </select>
                                         <div className="text-danger">{errors.City?.type === 'required' && <p role="alert">City is required</p>}</div>

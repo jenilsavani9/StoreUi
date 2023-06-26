@@ -23,7 +23,7 @@ function FeatureCard({ feature }) {
                 const response = await DeleteFeatureService(event.target.value)
                 dispatch({
                     type: CONTEXT_TYPE.REMOVE_FEATURE,
-                    features: response.data.result
+                    features: response.data.payload
                 })
                 toast.success('🦄 Successfully Deleted!', {
                     position: "top-right",
@@ -46,12 +46,12 @@ function FeatureCard({ feature }) {
     return (
         <div className='col-12 col-md-6 col-lg-4 mb-3 mb-sm-0'>
             <div className="card mt-4">
-                <h5 className="card-header">{feature.featureName}</h5>
+                <h5 className="card-header">{feature.name}</h5>
                 <div className="card-body">
-                    <p className="card-text">{feature.featureDescription}</p>
+                    <p className="card-text">{feature.description}</p>
                     <div className='d-flex'>
-                        <EditModal value={feature.featureId} />
-                        <button className="btn btn-danger btn-sm ms-2" value={feature.featureId} type='button' onClick={deleteFeature}>Delete</button>
+                        <EditModal value={feature.id} />
+                        <button className="btn btn-danger btn-sm ms-2" value={feature.id} type='button' onClick={deleteFeature}>Delete</button>
                     </div>
                 </div>
             </div>

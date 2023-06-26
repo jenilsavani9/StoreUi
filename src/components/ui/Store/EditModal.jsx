@@ -30,16 +30,16 @@ function EditModal({ storesId }) {
     const handleClose = () => setShow(false);
     const handleShow = (event) => {
         const index = stores.findIndex(
-            (item) => item.storeId == event.target.value
+            (item) => item.id == event.target.value
         )
         setModalStore({
             ...modalStore,
             "storeId": event.target.value,
-            "storeName": stores[index].storeName,
-            "addressLine1": stores[index].addressLine1,
-            "addressLine2": stores[index].addressLine2,
-            "postalCode": stores[index].postalCode,
-            "locationLink": stores[index].locationLink
+            "storeName": stores[index].name,
+            "addressLine1": stores[index].address.addressLine1,
+            "addressLine2": stores[index].address.addressLine2,
+            "postalCode": stores[index].address.postalCode,
+            "locationLink": stores[index].address.locationLink
         })
         setShow(true);
     }
@@ -70,7 +70,7 @@ function EditModal({ storesId }) {
             const response = await EditStore(modalStore);
             dispatch({
                 type: CONTEXT_TYPE.EDIT_STORE,
-                item: response?.data?.result[0]
+                item: response?.data?.payload[0]
             })
 
             // toast

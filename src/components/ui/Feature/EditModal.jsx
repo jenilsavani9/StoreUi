@@ -24,11 +24,11 @@ function EditModal({ value }) {
     const handleShow = (event) => {
         if (features != null) {
             const index = features.findIndex(
-                (item) => item.featureId == event.target.value
+                (item) => item.id == event.target.value
             )
-            setFeatureName(features[index]?.featureName)
-            setFeatureDescription(features[index]?.featureDescription)
-            setFeatureId(features[index]?.featureId)
+            setFeatureName(features[index]?.name)
+            setFeatureDescription(features[index]?.description)
+            setFeatureId(features[index]?.id)
         }
         setShow(true);
     }
@@ -40,12 +40,12 @@ function EditModal({ value }) {
             setValidated(false);
             handleClose();
 
-            const decoded = jwt_decode(localStorage.getItem('token'));
-            const response = await EditFeatureService(featureId, decoded.UserId, featureName, featureDescription)
+            const UserId = localStorage.getItem('UserId');
+            const response = await EditFeatureService(featureId, UserId, featureName, featureDescription)
 
             dispatch({
                 type: CONTEXT_TYPE.EDIT_FEATURE,
-                item: response.data.result[0]
+                item: response.data.payload
             })
             // toast
             toast.success('🦄 Successfully Updated!', {

@@ -15,7 +15,7 @@ function Services() {
             const response = await LoadFeature()
             dispatch({
                 type: CONTEXT_TYPE.SET_FEATURE,
-                features: response.data.result
+                features: response.data.payload
             })
         } catch (error) {
 

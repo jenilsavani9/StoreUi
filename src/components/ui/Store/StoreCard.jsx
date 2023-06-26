@@ -28,7 +28,7 @@ function StoreCard({ storesId,
             const response = await DeleteStoreService(storeId)
             dispatch({
                 type: CONTEXT_TYPE.REMOVE_STORE,
-                item: response.data.result
+                item: response.data.payload
             })
         } catch (error) {
             toast.error('🦄 Some Error Occurred!', {
@@ -71,18 +71,20 @@ function StoreCard({ storesId,
                     </div>
                     
 
-                    <div className="card-text text-body-tertiary">{(addressLine1 + addressLine2).length > 40 ? `${(addressLine1 + addressLine2).substring(0, 40)}...` : (addressLine1 + addressLine2) }{`${(addressLine1 + addressLine2).substring(0, 40)}...`}</div>
+                    <div className="card-text text-body-tertiary">{(addressLine1 + addressLine2).length > 40 ? `${(addressLine1 + addressLine2).substring(0, 40)}...` : (addressLine1 + " " + addressLine2) }</div>
                     
                     <div className="d-flex justify-content-between">
                         <div className="card-text">{cityName}, {countryName}</div>
-                        <div className="card-text"><a className='btn btn-secondary btn-sm' role='button' href={locationLink} target="_blank"><i className="bi bi-geo-alt-fill"></i> Map</a></div>
+                        <div className="card-text"><a className='btn btn-secondary btn-sm' role='button' href={locationLink} target="_blank">
+                            <i className="bi bi-geo-alt-fill"></i> Map</a></div>
                     </div>
 
                     <hr />
-                    {StoreFeature && StoreFeature.length > 0 ? StoreFeature.map((item, index) => { return <Badge className='me-2' bg="warning" text="dark" key={index}>{item.featureName}</Badge> }) : <Badge bg="secondary" >No Feature Found</Badge>}
+                    {StoreFeature && StoreFeature.length > 0 ? StoreFeature.map((item, index) => { 
+                        return <Badge className='me-2' bg="warning" text="dark" key={index}>{item.name}</Badge> }) : <Badge bg="secondary" >No Feature Found</Badge>}
 
                     <hr />
-                    {status == true ?
+                    
                         <div className='mt-2 d-flex justify-content-between'>
                             <div className='d-flex'>
                                 <EditModal storesId={storesId} />
@@ -92,7 +94,6 @@ function StoreCard({ storesId,
                                 <FeaturesModal storesId={storesId} />
                             </div>
                         </div>
-                        : <div></div>}
                 </div>
             </div>
         </div>

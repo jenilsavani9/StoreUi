@@ -21,10 +21,10 @@ function FeaturesModal({ storesId }) {
     const StoreFeatureIds = () => {
         var StoreFeatureId = []
         const index = stores.findIndex(
-            (item) => item.storeId == storesId
+            (item) => item.id == storesId
         )
-        stores[index].StoreFeature?.map(item => {
-            StoreFeatureId.push(item.featureId)
+        stores[index].features?.map(item => {
+            StoreFeatureId.push(item.id)
         })
         return StoreFeatureId;
     }
@@ -34,10 +34,10 @@ function FeaturesModal({ storesId }) {
             const response = await LoadFeature();
             dispatch({
                 type: CONTEXT_TYPE.SET_FEATURE,
-                features: response.data.result
+                features: response.data.payload
             })
             setTempIds(StoreFeatureIds())
-            setOptions(response.data.result);
+            setOptions(response.data.payload);
         } else {
             setTempIds(StoreFeatureIds())
             setOptions(features);
@@ -63,12 +63,12 @@ function FeaturesModal({ storesId }) {
         try {
             const response = await ChangeStoreFeature(tempIds, storesId);
             const index = stores.findIndex(
-                (item) => item.storeId == storesId
+                (item) => item.id == storesId
             )
-            stores[index].StoreFeature = response.data;
+            stores[index].features = response.data.payload;
             dispatch({
                 type: 'CHANGE_STORE_FEATURE',
-                item: response.data,
+                item: response.data.payload,
                 storesId: storesId
             })
             setShow(false);
@@ -89,13 +89,13 @@ function FeaturesModal({ storesId }) {
                 <Modal.Body>
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         {options && options?.map((item, index) => {
-                            if(tempIds.includes(item.featureId)){
+                            if(tempIds.includes(item.id)){
                                 return <h6 key={index}><Form.Check
                                 key={index}
                                 type='checkbox'
-                                id={item.featureId}
-                                label={item.featureName}
-                                value={item.featureId}
+                                id={item.id}
+                                label={item.name}
+                                value={item.id}
                                 defaultChecked
                                 onChange={AddDeleteIdFromTempId}
                             /></h6>
@@ -103,9 +103,9 @@ function FeaturesModal({ storesId }) {
                                 return <h6 key={index}><Form.Check
                                 key={index}
                                 type='checkbox'
-                                id={item.featureId}
-                                label={item.featureName}
-                                value={item.featureId}
+                                id={item.id}
+                                label={item.name}
+                                value={item.id}
                                 onChange={AddDeleteIdFromTempId}
                             /></h6>
                             }

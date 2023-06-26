@@ -66,7 +66,16 @@ export const GetUserInfoData = async () => {
 export const ValidateUserEmailService = async (userId, validateToken) => {
     const response = await axios({
         method: 'get',
-        url: `/api/Login/validate?UserId=${userId}&token=${validateToken}`
+        url: `/api/User/validate?UserId=${userId}&token=${validateToken}`
+    })
+    return response;
+}
+
+export const ForgotPasswordService = async (userId) => {
+    const response = await axios({
+        method: 'post',
+        url: `/api/User/forgotpassword?UserId=${userId}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
     return response;
 }

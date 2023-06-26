@@ -81,8 +81,8 @@ function Users() {
     async function LoadUsersData() {
         try {
             const response = await GetUsers(pageIndex)
-            setUsers(response.data.result)
-            setUserCount(response.data.userCount)
+            setUsers(response.data.payload.userList)
+            setUserCount(response.data.payload.userCount)
         } catch (error) {
         }
     }
@@ -101,7 +101,7 @@ function Users() {
 
     async function DeleteUser(event) {
         try {
-            const response = await DeleteUsers(event.target.value);
+            await DeleteUsers(event.target.value);
             LoadUsersData();
         } catch (error) {
             console.log(error)
@@ -186,11 +186,11 @@ function Users() {
                                         <td>{u.email}</td>
                                         <td>
                                             <h5>
-                                                {u.status == "0" ? <span className="badge bg-success">Active</span> : u.status == "1" ? <span className="badge bg-danger">Deactive</span> : <span className="badge bg-secondary">Pending</span>}
+                                                {u.status == "active" ? <span className="badge bg-success">Active</span> : u.status == "deactive" ? <span className="badge bg-danger">Deactive</span> : <span className="badge bg-secondary">Pending</span>}
                                             </h5>
                                         </td>
-                                        <td>{u.roles == "0" ? "Admin" : "Customer"}</td>
-                                        <td>{(u.status != "1" && u.roles != "0") ? <button type="button" className="btn btn-outline-danger btn-sm" value={u.userId} onClick={DeleteUser}>Delete</button> : ""}</td>
+                                        <td>{u.role == "0" ? "Admin" : "Customer"}</td>
+                                        <td>{(u.status != "deactive" && u.role != "admin") ? <button type="button" className="btn btn-outline-danger btn-sm" value={u.id} onClick={DeleteUser}>Delete</button> : ""}</td>
                                     </tr>)
                                 })}
                             </tbody>

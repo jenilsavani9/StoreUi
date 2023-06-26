@@ -33,11 +33,11 @@ function AddModal() {
         if (featureName.length >= 5) {
             setValidated(false);
             handleClose();
-            const decoded = jwt_decode(localStorage.getItem('token'));
-            const response = await AddFeaturesService(decoded.UserId, featureName, featureDescription)
+            const UserId = localStorage.getItem('UserId');
+            const response = await AddFeaturesService(UserId, featureName, featureDescription)
             dispatch({
                 type: CONTEXT_TYPE.ADD_FEATURE,
-                features: response.data.result[0]
+                features: response.data.payload
             })
             toast.success('🦄 Successfully Added!', {
                 position: "top-right",

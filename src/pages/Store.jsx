@@ -17,20 +17,11 @@ function Store() {
 
     async function GetStores() {
         try {
-            const decoded = jwt_decode(token);
-            const response = await GetStoresByUserId(decoded.UserId, token);
-
-            const storesData = response.data.result.map(async item => {
-                const StoreFeature = await GetFeaturesByStoreId(item.storeId, token);
-                item['StoreFeature'] = StoreFeature.data.result;
-                return item;
-            });
-
-            const updatedStores = await Promise.all(storesData);
-
+            const UserId = localStorage.getItem('UserId')
+            const response = await GetStoresByUserId(UserId, token);
             dispatch({
                 type: CONTEXT_TYPE.SET_STORES,
-                stores: updatedStores
+                stores: response.data.payload
             });
         } catch (error) {
             console.log(error);
@@ -59,15 +50,15 @@ function Store() {
                             {stores.length > 0 ? stores?.map((item, index) => {
                                 return <StoreCard
                                     key={index}
-                                    storesId={item.storeId}
-                                    storeName={item.storeName}
+                                    storesId={item.id}
+                                    storeName={item.name}
                                     status={item.status}
-                                    addressLine1={item.addressLine1}
-                                    addressLine2={item.addressLine2}
-                                    cityName={item.cityName}
-                                    countryName={item.countryName}
-                                    locationLink={item.locationLink}
-                                    StoreFeature={item.StoreFeature} />
+                                    addressLine1={item.address.addressLine1}
+                                    addressLine2={item.address.addressLine2}
+                                    cityName={item.city.name}
+                                    countryName={item.country.name}
+                                    locationLink={item.address.locationLink}
+                                    StoreFeature={item.features} />
                             }) : <div className='text-center'>No Store Found</div>}
                         </div>
                     </div>

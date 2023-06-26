@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert2';
-import { BASE_URL } from '../../../constants/regex';
 import { toast } from 'react-toastify';
 import { LoginResponse, PasswordResetByUser } from '../../../services/User';
 
-function ResetPassword(sendEmailToResetPass) {
+function ResetPassword(props) {
 
     const nav = useNavigate();
     // useStates for reset password form
@@ -49,9 +48,8 @@ function ResetPassword(sendEmailToResetPass) {
         }
         else {
             try {
-
-                const loginResponse = await LoginResponse(sendEmailToResetPass.email, tempPass, "")
-                const response = await PasswordResetByUser(loginResponse.data, sendEmailToResetPass.email, tempPass, newPass)
+                const loginResponse = await LoginResponse(props.email, tempPass, "")
+                const response = await PasswordResetByUser(loginResponse.data, props.email, tempPass, newPass)
                 if (response.data.status == true) {
                     swal.fire({
                         title: 'Success!',
@@ -85,7 +83,7 @@ function ResetPassword(sendEmailToResetPass) {
             <form className='row g-3 needs-validation' noValidate onSubmit={onHandleSubmit}>
                 <div className="mb-3">
                     <label for="exampleInputEmail1" className="form-label">Email </label>
-                    <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={sendEmailToResetPass.email} disabled />
+                    <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={props.email} disabled />
                     <div className="valid-feedback">
                         Looks good!
                     </div>

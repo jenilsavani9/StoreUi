@@ -3,10 +3,10 @@ import jwt_decode from "jwt-decode";
 
 
 export const LoadFeature = async () => {
-    const decoded = jwt_decode(localStorage.getItem('token'));
+    const UserId = localStorage.getItem('UserId');
     const response = await axios({
         method: 'get',
-        url: `api/Feature?UserId=${decoded.UserId}`,
+        url: `api/Feature?UserId=${UserId}`,
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
     return response;
@@ -18,10 +18,9 @@ export const AddFeaturesService = async (userId, featureName, featureDescription
         url: `/api/feature`,
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         data: {
-            featuresId: 0,
             userId: userId,
-            featuresName: featureName,
-            featuresDescription: featureDescription
+            name: featureName,
+            description: featureDescription
         }
     })
     return response;
@@ -33,10 +32,10 @@ export const EditFeatureService = async (featureId, userId, featureName, feature
         url: `/api/feature/${featureId}`,
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         data: {
-            featuresId: featureId,
+            id: featureId,
             userId: userId,
-            featuresName: featureName,
-            featuresDescription: featureDescription
+            name: featureName,
+            description: featureDescription
         }
     })
     return response;

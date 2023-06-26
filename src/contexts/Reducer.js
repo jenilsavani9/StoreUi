@@ -26,7 +26,7 @@ const reducer = (state, action) => {
             }
         case 'REMOVE_STORE':
             const index = state.stores.findIndex(
-                (item) => item.storeId == action.item.storeId
+                (item) => item.id == action.item.id
             )
             let newStore = [...state.stores]
             if (index >= 0) {
@@ -38,8 +38,7 @@ const reducer = (state, action) => {
             }
         case 'EDIT_STORE':
             var editItem = state.stores?.map((item) => {
-                if (item.storeId == action.item.storeId) {
-                    action.item.StoreFeature = item.StoreFeature
+                if (item.id == action.item.id) {
                     return action.item
                 } else {
                     return item
@@ -58,10 +57,10 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 features: [...state.features, action.features]
-            }
+                }
         case 'EDIT_FEATURE':
             var editFeature = state.features?.map((item) => {
-                if (item.featureId == action.item.featureId) {
+                if (item.id == action.item.id) {
                     return action.item
                 } else {
                     return item
@@ -73,7 +72,7 @@ const reducer = (state, action) => {
             }
         case 'REMOVE_FEATURE':
             const removeFeature = state.features.findIndex(
-                (item) => item.featureId == action.features.featureId
+                (item) => item.id == action.features.id
             )
             let newFeature = [...state.features]
             if (removeFeature >= 0) {
@@ -95,9 +94,9 @@ const reducer = (state, action) => {
             }
         case 'CHANGE_STORE_FEATURE':
             const index2 = state.stores.findIndex(
-                (item) => item.storeId == action.storesId
+                (item) => item.id == action.storesId
             )
-            state.stores[index2].StoreFeature = action.item;
+            state.stores[index2].features = action.item;
             return {
                 ...state,
             }

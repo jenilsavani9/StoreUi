@@ -3,6 +3,10 @@ import { Link, json, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode"
 import { useStateValue } from "../../contexts/StateProvider";
 import jwtDecode from "jwt-decode";
+import { Dropdown } from "react-bootstrap";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+import { ForgotPasswordService } from "../../services/User";
 
 function Navbar() {
 
@@ -23,7 +27,7 @@ function Navbar() {
                 localStorage.clear();
                 nav('/login');
             }
-           
+
         } catch (error) {
             localStorage.clear();
             nav('/login')
@@ -37,9 +41,10 @@ function Navbar() {
             setFirstName(localStorage.getItem('FirstName'));
             setLastName(localStorage.getItem('LastName'));
             // setLastLogin(JSON.parse(decoded.lastLogin));
-            // if (decoded.role == "admin") {
-            //     setAdmin(true)
-            // }
+            var decoded = jwtDecode(token)
+            if (decoded.role == "admin") {
+                setAdmin(true)
+            }
         } catch (error) {
             nav('/login');
         }
@@ -50,11 +55,45 @@ function Navbar() {
         nav('/login')
     }
 
+    const ForgotPassword = async () => {
+        Swal.fire({
+            title: 'Do you want to Reset Password?',
+            showCancelButton: true,
+            confirmButtonText: 'Reset',
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                 
+                var result = await ForgotPasswordService(localStorage.getItem('UserId'))
+                toast.success('🦄 Email sent to your register email id!!!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    theme: "dark",
+                });
+
+            } else if (result.isDenied) {
+                toast.error('🦄 Some Error Occurred!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    theme: "dark",
+                });
+            }
+        })
+    }
+
     var loginButton;
     if (token == null) {
         loginButton = <div className="d-flex"><Link to="/login"><button className="btn btn-light">Login</button></Link></div>;
     } else {
-        loginButton = <div className="d-flex align-items-center text-white">{FirstName} {LastName}<Link to="/login"><button className="btn btn-light ms-2" onClick={LogoutUser}>Logout</button></Link></div>;
+        loginButton = <Dropdown>
+            <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                {FirstName} {LastName}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+                <Dropdown.Item onClick={ForgotPassword}>Forgot Password</Dropdown.Item>
+                <Dropdown.Item onClick={LogoutUser}>Logout</Dropdown.Item>
+            </Dropdown.Menu>
+        </Dropdown>
     }
 
     return (
@@ -84,7 +123,6 @@ function Navbar() {
                         </ul>
 
                         {loginButton}
-
 
                     </div>
                 </div>

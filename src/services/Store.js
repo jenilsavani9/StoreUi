@@ -7,13 +7,12 @@ export const EditStore = async (editStore) => {
         url: `/api/store/${editStore.storeId}`,
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         data: {
-            StoreId: editStore.storeId,
-            StoreName: editStore.storeName,
+            Id: editStore.storeId,
+            Name: editStore.storeName,
             AddressLine1: editStore.addressLine1,
             AddressLine2: editStore.addressLine2,
             PostalCode: editStore.postalCode,
             LocationLink: editStore.locationLink,
-            Status: "active"
         }
     })
     return response;
@@ -27,7 +26,7 @@ export const AddStoreService = async (data, userId) => {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         data: {
             UserId: userId,
-            StoreName: data.StoreName,
+            Name: data.StoreName,
             AddressLine1: data.AddressLine1,
             AddressLine2: data.AddressLine2,
             CountryId: data.Country,
@@ -35,7 +34,6 @@ export const AddStoreService = async (data, userId) => {
             CityId: data.City,
             PostalCode: data.PostalCode,
             LocationLink: data.LocationLink,
-            Status: "active"
         }
     })
     return response;

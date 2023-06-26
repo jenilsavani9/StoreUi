@@ -34,23 +34,12 @@ function FileUpload({ }) {
     const fetchData = async () => {
         try {
 
-            const decoded = jwt_decode(token);
-            const response = await GetStoresByUserId(decoded.UserId, token);
-            const tempStoresData = await Promise.all(
-                response.data.result.map(async (item) => {
-                    const StoreFeature = await GetFeaturesByStoreId(item.storeId, token);
-                    item['StoreFeature'] = StoreFeature.data.result;
-                    return item;
-                })
-            );
-
-            dispatch({ type: CONTEXT_TYPE.SET_STORES, stores: [] });
-            setTempStores(tempStores.concat(tempStoresData));
+            const UserId = localStorage.getItem('UserId')
+            const response = await GetStoresByUserId(UserId, token);
             dispatch({
                 type: CONTEXT_TYPE.SET_STORES,
-                stores: tempStores.concat(tempStoresData),
+                stores: response.data.payload
             });
-            setTempStores([])
         } catch (error) {
             console.log(error);
         }
@@ -58,10 +47,10 @@ function FileUpload({ }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const decoded = jwt_decode(localStorage.getItem('token'));
+        const UserId = localStorage.getItem('UserId')
         const formData = new FormData();
         formData.append('FormFile', file);
-        formData.append("UserId", decoded.UserId)
+        formData.append("UserId", UserId)
         try {
             await CSVUpload(formData);
             handleClose();
@@ -96,7 +85,7 @@ function FileUpload({ }) {
                     <Table striped bordered hover>
                         <thead>
                             <tr>
-                                <th>StoreName</th>
+                                <th>Name</th>
                                 <th>CityName</th>
                                 <th>AddressLine1</th>
                             </tr>
