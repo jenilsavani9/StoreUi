@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react'
 import "bootstrap-icons/font/bootstrap-icons.css";
 import jwtDecode from 'jwt-decode';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import FormError from '../components/ui/User/FormError';
+import { TOAST_CONSTANT } from '../constants/constant';
 import { AddUsers, DeleteUsers, GetUsers } from '../services/User';
+import { Table } from "react-bootstrap";
 
 function Users() {
 
@@ -20,37 +22,39 @@ function Users() {
     const [loader, setLoader] = useState(false);
     const [userCount, setUserCount] = useState(0);
 
+    const CloseRef = useRef();
+
+     // validation JS Code.
+     (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+
     const handleAddUserSubmit = async (event) => {
         event.preventDefault();
-
-        // validation JS Code.
-        (() => {
-            'use strict'
-
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            const forms = document.querySelectorAll('.needs-validation')
-
-            // Loop over them and prevent submission
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
 
         setLoader(true);
         try {
             setToken(localStorage.getItem('token'));
         } catch (error) {
             toast.error('🦄 User Not Valid!', {
-                position: "top-right",
-                autoClose: 5000,
-                theme: "dark",
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
             });
         }
 
@@ -60,19 +64,20 @@ function Users() {
             setLastName("");
             setEmail("");
             setPassword("");
-
+            CloseRef.current.click();
+            event.target.reset();
             toast.success('🦄 User Added successfully!', {
-                position: "top-right",
-                autoClose: 5000,
-                theme: "dark",
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
             });
             nav('/Users');
             LoadUsersData();
         } catch (error) {
-            toast.error('🦄 Wrong Credentials!', {
-                position: "top-right",
-                autoClose: 5000,
-                theme: "dark",
+            toast.error(`🦄 ${error.response.data.message}!`, {
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
             });
         }
         setLoader(false);
@@ -155,6 +160,7 @@ function Users() {
                                                     Loading...</button> : <button className="btn btn-dark" type="submit">Save</button>}
 
                                             </div>
+                                            <button type="button" className="btn btn-secondary d-none" data-bs-dismiss="modal" ref={CloseRef} >Close</button>
                                         </form>
                                     </div>
                                 </div>
@@ -167,7 +173,7 @@ function Users() {
                 <div>
 
                     <div>
-                        <table className="table table-striped" id='user-table'>
+                        <Table striped bordered hover>
                             <thead id='user-table-header'>
                                 <tr>
                                     <th scope="col">First Name</th>
@@ -189,13 +195,13 @@ function Users() {
                                                 {u.status == "active" ? <span className="badge bg-success">Active</span> : u.status == "deactive" ? <span className="badge bg-danger">Deactive</span> : <span className="badge bg-secondary">Pending</span>}
                                             </h5>
                                         </td>
-                                        <td>{u.role == "0" ? "Admin" : "Customer"}</td>
-                                        <td>{(u.status != "deactive" && u.role != "admin") ? <button type="button" className="btn btn-outline-danger btn-sm" value={u.id} onClick={DeleteUser}>Delete</button> : ""}</td>
+                                        <td>{u.role == "admin" ? "Admin" : "Customer"}</td>
+                                        <td>{(u.status != "deactive" && u.role != "admin") ? <button type="button" className="btn btn-danger btn-sm" value={u.id} onClick={DeleteUser}>Delete</button> : ""}</td>
                                     </tr>)
                                 })}
                             </tbody>
 
-                        </table>
+                        </Table>
                         <div className='d-flex justify-content-center'>
                             <nav aria-label="Page navigation example">
                                 <ul className="pagination">

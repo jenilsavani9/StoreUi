@@ -1,16 +1,14 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
-import jwt_decode from "jwt-decode";
+import React, { useState } from 'react';
 import { Table } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 
 
-import { CSVUpload, GetFeaturesByStoreId, GetStoresByUserId } from '../../../services/Store'
+import { CONTEXT_TYPE, TOAST_CONSTANT } from '../../../constants/constant';
 import { useStateValue } from '../../../contexts/StateProvider';
-import { CONTEXT_TYPE } from '../../../constants/constant';
+import { CSVUpload, GetStoresByUserId } from '../../../services/Store';
 
 
 function FileUpload({ }) {
@@ -56,15 +54,15 @@ function FileUpload({ }) {
             handleClose();
             fetchData();
             toast.success('🦄 Stores Added Successfully!', {
-                position: "top-right",
-                autoClose: 5000,
-                theme: "dark",
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
             });
         } catch (error) {
             toast.error('🦄 Wrong file format!', {
-                position: "top-right",
-                autoClose: 5000,
-                theme: "dark",
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
             });
         }
     }

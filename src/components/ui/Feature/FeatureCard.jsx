@@ -1,12 +1,12 @@
-import React from 'react'
-import Swal from 'sweetalert2';
+import React from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2';
 
-import EditModal from './EditModal';
-import { CONTEXT_TYPE } from '../../../constants/constant'
-import { useStateValue } from '../../../contexts/StateProvider'
+import { CONTEXT_TYPE, TOAST_CONSTANT } from '../../../constants/constant';
+import { useStateValue } from '../../../contexts/StateProvider';
 import { DeleteFeatureService } from '../../../services/Features';
+import EditModal from './EditModal';
 
 function FeatureCard({ feature }) {
 
@@ -26,16 +26,16 @@ function FeatureCard({ feature }) {
                     features: response.data.payload
                 })
                 toast.success('🦄 Successfully Deleted!', {
-                    position: "top-right",
-                    autoClose: 3000,
-                    theme: "dark",
+                    position: TOAST_CONSTANT.position,
+                    autoClose: TOAST_CONSTANT.autoClose,
+                    theme: TOAST_CONSTANT.theme,
                 });
 
             } else if (result.isDenied) {
                 toast.error('🦄 Some Error Occurred!', {
-                    position: "top-right",
-                    autoClose: 3000,
-                    theme: "dark",
+                    position: TOAST_CONSTANT.position,
+                    autoClose: TOAST_CONSTANT.autoClose,
+                    theme: TOAST_CONSTANT.theme,
                 });
             }
         })

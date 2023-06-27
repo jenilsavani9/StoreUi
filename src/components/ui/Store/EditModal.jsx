@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { Form } from 'react-bootstrap';
+import { CONTEXT_TYPE, TOAST_CONSTANT } from '../../../constants/constant';
 import { MapLinkRegex } from '../../../constants/regex';
 import { useStateValue } from '../../../contexts/StateProvider';
-import { Form } from 'react-bootstrap';
 import { EditStore } from '../../../services/Store';
-import { CONTEXT_TYPE } from '../../../constants/constant';
 
 function EditModal({ storesId }) {
 
@@ -75,9 +75,9 @@ function EditModal({ storesId }) {
 
             // toast
             toast.success('🦄 Successfully Updated!', {
-                position: "top-right",
-                autoClose: 5000,
-                theme: "dark",
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
             });
         }
     };

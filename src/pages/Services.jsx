@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 
-import FeatureCard from '../components/ui/Feature/FeatureCard'
-import { useStateValue } from '../contexts/StateProvider'
-import { CONTEXT_TYPE } from '../constants/constant';
 import AddModal from '../components/ui/Feature/AddModal';
+import FeatureCard from '../components/ui/Feature/FeatureCard';
+import { CONTEXT_TYPE } from '../constants/constant';
+import { useStateValue } from '../contexts/StateProvider';
 import { LoadFeature } from '../services/Features';
 
 function Services() {

@@ -1,13 +1,12 @@
-import React from 'react'
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { CONTEXT_TYPE } from '../../../constants/constant';
 import { useStateValue } from '../../../contexts/StateProvider';
 import { LoadFeature } from '../../../services/Features';
-import { CONTEXT_TYPE } from '../../../constants/constant';
 import { ChangeStoreFeature } from '../../../services/StoreFeature';
 
 function FeaturesModal({ storesId }) {

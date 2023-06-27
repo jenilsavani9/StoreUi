@@ -17,9 +17,27 @@ export const PasswordResetByUser = async (token, email, tempPass, newPass) => {
     const response = await axios({
         method: 'post',
         headers: { Authorization: `Bearer ${token}` },
-        url: `/api/Login/resetpassword?email=${email}&password=${tempPass}&newPassword=${newPass}`
+        url: `/api/User/resetpassword`,
+        data: {
+            Email: email,
+            Password: tempPass,
+            NewPassword: newPass
+        }
     })
     return response
+}
+
+export const ChangePasswordService = async (token, UserId, tempPass) => {
+    const response = await axios({
+        method: 'post',
+        headers: { Authorization: `Bearer ${token}` },
+        url: `api/User/passwordchange`,
+        data: {
+            UserId: UserId,
+            Password: tempPass,
+        }
+    })
+    return response;
 }
 
 export const AddUsers = async (firstName, lastName, email, password) => {

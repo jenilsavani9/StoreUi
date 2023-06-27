@@ -1,19 +1,18 @@
-import React, { useState, useRef } from 'react'
-import { useForm } from 'react-hook-form';
 import 'bootstrap';
-import jwt_decode from "jwt-decode";
+import React, { useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
+import { CONTEXT_TYPE, TOAST_CONSTANT } from '../../../constants/constant';
 import { MapLinkRegex } from '../../../constants/regex';
 import { useStateValue } from '../../../contexts/StateProvider';
-import { CONTEXT_TYPE } from '../../../constants/constant';
 import { AddStoreService, StoreLocationService } from '../../../services/Store';
 
 function AddModal() {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const [{  }, dispatch] = useStateValue();
+    const [{ }, dispatch] = useStateValue();
 
     //dropdown list
     const [cityList, setCityList] = useState();
@@ -39,18 +38,18 @@ function AddModal() {
                 store: response.data.payload[0]
             })
             toast.success('🦄 Stores Added Successfully!', {
-                position: "top-right",
-                autoClose: 5000,
-                theme: "dark",
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
             });
             CloseRef.current.click()
             e.target.reset();
         } catch (error) {
             console.log(error)
             toast.error('🦄 some error Occurred!', {
-                position: "top-right",
-                autoClose: 5000,
-                theme: "dark",
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
             });
         }
     }

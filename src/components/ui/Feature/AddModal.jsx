@@ -1,14 +1,12 @@
-import React from 'react'
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import jwt_decode from "jwt-decode";
+import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { CONTEXT_TYPE } from '../../../constants/constant';
-import { useStateValue } from '../../../contexts/StateProvider'
+import { CONTEXT_TYPE, TOAST_CONSTANT } from '../../../constants/constant';
+import { useStateValue } from '../../../contexts/StateProvider';
 import { AddFeaturesService } from '../../../services/Features';
 
 
@@ -40,9 +38,9 @@ function AddModal() {
                 features: response.data.payload
             })
             toast.success('🦄 Successfully Added!', {
-                position: "top-right",
-                autoClose: 5000,
-                theme: "dark",
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
             });
             setFeatureName("");
             setFeatureDescription("");

@@ -20,6 +20,7 @@
 
 #user-table {
     margin-top: 10px;
+    border: 1px solid rgb(222,226,230);
 }
 
 @media screen and (max-width: 1200px) {

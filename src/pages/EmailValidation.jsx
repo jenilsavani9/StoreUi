@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import "../App.css";
-import ResetPassword from '../components/ui/User/ResetPassword';
 import swal from 'sweetalert2';
-import { ValidateUserEmailService } from '../services/User';
+import "../App.css";
 import ForgotPassword from '../components/ui/User/ForgotPassword';
+import ResetPassword from '../components/ui/User/ResetPassword';
+import { ValidateUserEmailService } from '../services/User';
 
 function EmailValidation() {
 
@@ -48,10 +48,8 @@ function EmailValidation() {
                 setSendEmailToResetPass(response.data.payload.email)
                 if (response.data.payload.status == "pending") {
                     setIsResetPassword(true)
-                    // IsResetPassword = <ResetPassword email={sendEmailToResetPass} />
                 } else {
                     setIsResetPassword(false)
-                    // IsResetPassword = <ResetPassword email={sendEmailToResetPass} />
                 }
             }
         } catch (error) {
@@ -72,7 +70,7 @@ function EmailValidation() {
         <div className='d-flex flex-column align-items-center mt-5'>
             {validateResponse ?
                 <>
-                    {sendEmailToResetPass != "" ? <ResetPassword email={sendEmailToResetPass} /> : <div className="spinner-border" role="status">
+                    {sendEmailToResetPass != "" ? isResetPassword == true? <ResetPassword email={sendEmailToResetPass} /> : <ForgotPassword email={sendEmailToResetPass} /> : <div className="spinner-border" role="status">
                         <span className="visually-hidden">Loading...</span>
                     </div>}
                 </> :

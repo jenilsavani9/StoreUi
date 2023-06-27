@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Link, json, useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode"
-import { useStateValue } from "../../contexts/StateProvider";
 import jwtDecode from "jwt-decode";
+import React, { useEffect, useState } from "react";
 import { Dropdown } from "react-bootstrap";
-import Swal from "sweetalert2";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import { TOAST_CONSTANT } from "../../constants/constant";
+import { useStateValue } from "../../contexts/StateProvider";
 import { ForgotPasswordService } from "../../services/User";
 
 function Navbar() {
@@ -62,19 +62,22 @@ function Navbar() {
             confirmButtonText: 'Reset',
         }).then(async (result) => {
             if (result.isConfirmed) {
-                 
+                const loadingToast = toast.loading("Please wait...")
                 var result = await ForgotPasswordService(localStorage.getItem('UserId'))
-                toast.success('🦄 Email sent to your register email id!!!', {
-                    position: "top-right",
-                    autoClose: 3000,
-                    theme: "dark",
+                toast.update(loadingToast, {
+                    render: '🦄 Email sent to your register email id!!!',
+                    type: "success",
+                    position: TOAST_CONSTANT.position,
+                    autoClose: TOAST_CONSTANT.autoClose,
+                    theme: TOAST_CONSTANT.theme,
+                    isLoading: false
                 });
 
             } else if (result.isDenied) {
                 toast.error('🦄 Some Error Occurred!', {
-                    position: "top-right",
-                    autoClose: 3000,
-                    theme: "dark",
+                    position: TOAST_CONSTANT.position,
+                    autoClose: TOAST_CONSTANT.autoClose,
+                    theme: TOAST_CONSTANT.theme,
                 });
             }
         })

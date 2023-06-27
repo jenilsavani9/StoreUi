@@ -13,3 +13,9 @@ export const CONTEXT_TYPE = {
     MODAL_STORE: "MODAL_STORE",
     MODAL_FEATURE: "MODAL_FEATURE"
 }
+
+export const TOAST_CONSTANT = {
+    position: "top-right",
+    autoClose: 5000,
+    theme: "dark"
+}

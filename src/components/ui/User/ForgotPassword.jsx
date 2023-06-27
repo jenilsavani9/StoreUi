@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
-import { toast } from 'react-toastify';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import { TOAST_CONSTANT } from '../../../constants/constant';
+import { ChangePasswordService } from '../../../services/User';
 
 
 function ForgotPassword(sendEmailToResetPass) {
@@ -10,8 +13,39 @@ function ForgotPassword(sendEmailToResetPass) {
     const [newPass, setNewPass] = useState("");
     const [conPass, setConPass] = useState("");
 
-    const onHandleSubmit = () => {
-        alert("hello")
+    const onHandleSubmit = async (event) => {
+        event.preventDefault();
+        var error = 0;
+        if (newPass != conPass) {
+            error += 1;
+            toast.error('🦄 New Password and Confirm password must be same!', {
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
+            });
+        }
+        if (newPass.length < 5) {
+            error += 1;
+            toast.error('🦄 Password Length Must be Greater than 5', {
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
+            });
+        }
+        if (error == 0) {
+            var token = localStorage.getItem("token");
+            var UserId = localStorage.getItem("UserId");
+            await ChangePasswordService(token, UserId, newPass)
+            Swal.fire({
+                title: 'Success!',
+                text: "password changed!!!",
+                icon: 'Success',
+                confirmButtonText: 'Cool'
+            }).then(() => {
+                nav('/login');
+            })
+        }
+
     }
 
 

@@ -1,13 +1,13 @@
-import React from 'react'
-import Swal from 'sweetalert2'
+import React from 'react';
 import Badge from 'react-bootstrap/Badge';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
-import EditModal from './EditModal';
+import { CONTEXT_TYPE, TOAST_CONSTANT } from '../../../constants/constant';
 import { useStateValue } from '../../../contexts/StateProvider';
-import { CONTEXT_TYPE } from '../../../constants/constant';
-import FeaturesModal from './FeaturesModal';
 import { DeleteStoreService } from '../../../services/Store';
+import EditModal from './EditModal';
+import FeaturesModal from './FeaturesModal';
 
 
 function StoreCard({ storesId,
@@ -32,9 +32,9 @@ function StoreCard({ storesId,
             })
         } catch (error) {
             toast.error('🦄 Some Error Occurred!', {
-                position: "top-right",
-                autoClose: 5000,
-                theme: "dark",
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
             });
         }
     }
@@ -51,9 +51,9 @@ function StoreCard({ storesId,
 
             } else if (result.isDenied) {
                 toast.error('🦄 Some Error Occurred!', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    theme: "dark",
+                    position: TOAST_CONSTANT.position,
+                    autoClose: TOAST_CONSTANT.autoClose,
+                    theme: TOAST_CONSTANT.theme,
                 });
             }
         })
@@ -69,10 +69,10 @@ function StoreCard({ storesId,
                         {/* <div className="card-text">{status == true ? <span className="badge text-bg-success">Open</span> : <span className="badge rounded-pill text-bg-danger">Closed</span>}</div> */}
 
                     </div>
-                    
 
-                    <div className="card-text text-body-tertiary">{(addressLine1 + addressLine2).length > 40 ? `${(addressLine1 + addressLine2).substring(0, 40)}...` : (addressLine1 + " " + addressLine2) }</div>
-                    
+
+                    <div className="card-text text-body-tertiary">{(addressLine1 + addressLine2).length > 40 ? `${(addressLine1 + addressLine2).substring(0, 40)}...` : (addressLine1 + " " + addressLine2)}</div>
+
                     <div className="d-flex justify-content-between">
                         <div className="card-text">{cityName}, {countryName}</div>
                         <div className="card-text"><a className='btn btn-secondary btn-sm' role='button' href={locationLink} target="_blank">
@@ -80,20 +80,21 @@ function StoreCard({ storesId,
                     </div>
 
                     <hr />
-                    {StoreFeature && StoreFeature.length > 0 ? StoreFeature.map((item, index) => { 
-                        return <Badge className='me-2' bg="warning" text="dark" key={index}>{item.name}</Badge> }) : <Badge bg="secondary" >No Feature Found</Badge>}
+                    {StoreFeature && StoreFeature.length > 0 ? StoreFeature.map((item, index) => {
+                        return <Badge className='me-2' bg="warning" text="dark" key={index}>{item.name}</Badge>
+                    }) : <Badge bg="secondary" >No Feature Found</Badge>}
 
                     <hr />
-                    
-                        <div className='mt-2 d-flex justify-content-between'>
-                            <div className='d-flex'>
-                                <EditModal storesId={storesId} />
-                                <button value={storesId} className="btn btn-danger btn-sm ms-2" type='button' onClick={deleteStore}>Delete</button>
-                            </div>
-                            <div>
-                                <FeaturesModal storesId={storesId} />
-                            </div>
+
+                    <div className='mt-2 d-flex justify-content-between'>
+                        <div className='d-flex'>
+                            <EditModal storesId={storesId} />
+                            <button value={storesId} className="btn btn-danger btn-sm ms-2" type='button' onClick={deleteStore}>Delete</button>
                         </div>
+                        <div>
+                            <FeaturesModal storesId={storesId} />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

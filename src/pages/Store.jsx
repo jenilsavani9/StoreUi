@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import jwt_decode from "jwt-decode";
 import 'bootstrap';
+import React, { useEffect, useState } from 'react';
 
-import StoreCard from '../components/ui/Store/StoreCard';
-import { useStateValue } from '../contexts/StateProvider';
 import AddModal from '../components/ui/Store/AddModal';
-import { CONTEXT_TYPE } from '../constants/constant';
+import StoreCard from '../components/ui/Store/StoreCard';
 import FileUpload from '../components/ui/Ui/FileUpload';
-import { GetFeaturesByStoreId, GetStoresByUserId } from '../services/Store';
+import { CONTEXT_TYPE } from '../constants/constant';
+import { useStateValue } from '../contexts/StateProvider';
+import { GetStoresByUserId } from '../services/Store';
 
 
 function Store() {

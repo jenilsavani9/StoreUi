@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import 'react-toastify/dist/ReactToastify.css';
-import swal from 'sweetalert2';
-import { useDeviceSelectors } from 'react-device-detect';
-import jwt_decode from "jwt-decode";
 import { toast } from 'react-toastify';
-import { GetUserInfoData, LoginResponse } from '../services/User';
+import 'react-toastify/dist/ReactToastify.css';
 import Spinners from '../components/ui/Ui/Spinner';
+import { TOAST_CONSTANT } from '../constants/constant';
+import { GetUserInfoData, LoginResponse } from '../services/User';
 
 function Login() {
 
@@ -42,16 +40,16 @@ function Login() {
 
         if (email == '') {
             toast.error("🦄 Email Can't be null!", {
-                position: "top-right",
-                autoClose: 5000,
-                theme: "dark",
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
             });
         }
         if (password == '' || password.length < 5) {
             toast.error("🦄 Password is not valid!", {
-                position: "top-right",
-                autoClose: 5000,
-                theme: "dark",
+                position: TOAST_CONSTANT.position,
+                autoClose: TOAST_CONSTANT.autoClose,
+                theme: TOAST_CONSTANT.theme,
             });
         }
         else {
@@ -79,9 +77,9 @@ function Login() {
                 }
             } catch (error) {
                 toast.error("🦄 Invalid Credentials", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    theme: "dark",
+                    position: TOAST_CONSTANT.position,
+                    autoClose: TOAST_CONSTANT.autoClose,
+                    theme: TOAST_CONSTANT.theme,
                 });
             }
 

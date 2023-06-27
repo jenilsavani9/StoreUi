@@ -1,5 +1,4 @@
-import axios from "axios"
-import jwt_decode from "jwt-decode";
+import axios from "axios";
 
 
 export const LoadFeature = async () => {

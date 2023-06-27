@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 
 // function for edit store
 export const EditStore = async (editStore) => {

@@ -1,12 +1,12 @@
-import React, { Fragment } from 'react'
-import { Routes, Route, Navigate } from "react-router-dom";
-import Login from '../pages/Login';
+import React, { Fragment } from 'react';
+import { Navigate, Route, Routes } from "react-router-dom";
+import Navbar from '../components/layout/Navbar';
 import EmailValidation from '../pages/EmailValidation';
-import Store from '../pages/Store';
+import Login from '../pages/Login';
 import Services from '../pages/Services';
+import Store from '../pages/Store';
 import Users from '../pages/Users';
 import PageNotFound from './PageNotFound';
-import Navbar from '../components/layout/Navbar';
 
 function RouterConfig() {
     return (
