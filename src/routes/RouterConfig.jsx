@@ -6,7 +6,7 @@ import Login from '../pages/Login';
 import Services from '../pages/Services';
 import Store from '../pages/Store';
 import Users from '../pages/Users';
-import PageNotFound from './PageNotFound';
+import PageNotFound from '../pages/PageNotFound';
 
 function RouterConfig() {
     return (

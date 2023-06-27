@@ -1,18 +1,15 @@
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import { CONTEXT_TYPE, TOAST_CONSTANT } from '../../../constants/constant';
-import { useStateValue } from '../../../contexts/StateProvider';
-import { AddFeaturesService } from '../../../services/Features';
-
-
+import { CONTEXT_TYPE, TOAST_CONSTANT } from "../../../constants/constant";
+import { useStateValue } from "../../../contexts/StateProvider";
+import { AddFeaturesService } from "../../../services/Features";
 
 function AddModal() {
-
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -25,19 +22,22 @@ function AddModal() {
 
     const [{ }, dispatch] = useStateValue();
 
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (featureName.length >= 5) {
             setValidated(false);
             handleClose();
-            const UserId = localStorage.getItem('UserId');
-            const response = await AddFeaturesService(UserId, featureName, featureDescription)
+            const UserId = localStorage.getItem("UserId");
+            const response = await AddFeaturesService(
+                UserId,
+                featureName,
+                featureDescription
+            );
             dispatch({
                 type: CONTEXT_TYPE.ADD_FEATURE,
-                features: response.data.payload
-            })
-            toast.success('🦄 Successfully Added!', {
+                features: response.data.payload,
+            });
+            toast.success("🦄 Successfully Added!", {
                 position: TOAST_CONSTANT.position,
                 autoClose: TOAST_CONSTANT.autoClose,
                 theme: TOAST_CONSTANT.theme,
@@ -48,7 +48,6 @@ function AddModal() {
             setValidated(true);
         }
     };
-
 
     return (
         <div>
@@ -64,14 +63,29 @@ function AddModal() {
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Feature Name</Form.Label>
-                            <Form.Control type="text" placeholder="" required minLength={5} value={featureName} onChange={e => setFeatureName(e.target.value)} />
+                            <Form.Control
+                                type="text"
+                                placeholder=""
+                                required
+                                minLength={5}
+                                value={featureName}
+                                onChange={(e) => setFeatureName(e.target.value)}
+                            />
                             <Form.Control.Feedback type="invalid">
                                 Feature Name is not valid
                             </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                        <Form.Group
+                            className="mb-3"
+                            controlId="exampleForm.ControlTextarea1"
+                        >
                             <Form.Label>Feature Description</Form.Label>
-                            <Form.Control as="textarea" rows={3} value={featureDescription} onChange={e => setFeatureDescription(e.target.value)} />
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                value={featureDescription}
+                                onChange={(e) => setFeatureDescription(e.target.value)}
+                            />
                         </Form.Group>
 
                         <Button variant="dark" type="submit">
@@ -81,7 +95,7 @@ function AddModal() {
                 </Modal.Body>
             </Modal>
         </div>
-    )
+    );
 }
 
-export default AddModal
+export default AddModal;

@@ -1,8 +1,8 @@
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import "./App.css";
-import { AXIOS_URL } from "./constants/constant";
-import RouterConfig from "./navigations/RouterConfig";
+import { AXIOS_URL } from "./constants/constant.js";
+import RouterConfig from "./routes/RouterConfig.jsx";
 
 function App() {
 
