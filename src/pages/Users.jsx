@@ -18,27 +18,20 @@ function Users() {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [token, setToken] = useState(null);
     const [loader, setLoader] = useState(false);
     const [userCount, setUserCount] = useState(0);
 
     const CloseRef = useRef();
 
-     // validation JS Code.
-     (() => {
+    (() => {
         'use strict'
-
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
         const forms = document.querySelectorAll('.needs-validation')
-
-        // Loop over them and prevent submission
         Array.from(forms).forEach(form => {
             form.addEventListener('submit', event => {
                 if (!form.checkValidity()) {
                     event.preventDefault()
                     event.stopPropagation()
                 }
-
                 form.classList.add('was-validated')
             }, false)
         })
@@ -46,17 +39,7 @@ function Users() {
 
     const handleAddUserSubmit = async (event) => {
         event.preventDefault();
-
         setLoader(true);
-        try {
-            setToken(localStorage.getItem('token'));
-        } catch (error) {
-            toast.error('🦄 User Not Valid!', {
-                position: TOAST_CONSTANT.position,
-                autoClose: TOAST_CONSTANT.autoClose,
-                theme: TOAST_CONSTANT.theme,
-            });
-        }
 
         try {
             const response = await AddUsers(firstName, lastName, email, password);

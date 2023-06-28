@@ -1,5 +1,5 @@
-import axios from "axios";
 import { ToastContainer } from "react-toastify";
+import axios from "axios";
 import "./App.css";
 import { AXIOS_URL } from "./constants/constant.js";
 import RouterConfig from "./routes/RouterConfig.jsx";

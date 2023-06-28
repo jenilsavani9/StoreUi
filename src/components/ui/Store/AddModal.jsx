@@ -27,7 +27,7 @@ function AddModal() {
         setCountryList(response.data.locations.countries)
         setStateList(response.data.locations.states)
     }
-
+    
     async function handleAddStoreSubmit(data, e) {
 
         try {
