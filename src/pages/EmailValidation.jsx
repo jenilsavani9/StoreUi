@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import swal from 'sweetalert2';
-import "../App.css";
+// import "../App.css";
 import ForgotPassword from '../components/ui/User/ForgotPassword';
 import ResetPassword from '../components/ui/User/ResetPassword';
 import { ValidateUserEmailService } from '../services/User';
@@ -59,8 +59,8 @@ function EmailValidation() {
                 icon: 'error',
                 confirmButtonText: 'Cool'
             }).then(() => {
-                console.log(error)
-                // nav('/login');
+                // console.log(error)
+                nav('/login');
             })
         }
     }

@@ -12,7 +12,7 @@ function Navbar() {
 
     var nav = useNavigate();
 
-    const [{ user }] = useStateValue();
+    const [{ }] = useStateValue();
     const [token, setToken] = useState(localStorage.getItem('token'))
 
     const [FirstName, setFirstName] = useState("");
