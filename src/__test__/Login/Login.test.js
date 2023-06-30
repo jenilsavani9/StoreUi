@@ -2,8 +2,8 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Login from './Login';
-import { GetUserInfoData, LoginResponse } from '../services/User';
+import Login from '../../pages/Login';
+import { GetUserInfoData, LoginResponse } from '../../services/User';
 
 jest.mock('react-router-dom', () => ({
     useNavigate: jest.fn(),
@@ -15,7 +15,7 @@ jest.mock('react-toastify', () => ({
     },
 }));
 
-jest.mock('../services/User', () => ({
+jest.mock('../../services/User', () => ({
     GetUserInfoData: jest.fn(),
     LoginResponse: jest.fn(),
 }));

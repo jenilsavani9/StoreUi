@@ -56,7 +56,7 @@ function StoreCard({ storesId,
                     theme: TOAST_CONSTANT.theme,
                 });
             }
-        })
+        })  
     }
 
     return (
