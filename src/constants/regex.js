@@ -3,5 +3,5 @@ export const MapLinkRegex = {
 }
 
 export const BASE_URL = {
-    URL : "https://localhost:44372"
+    URL : "http://localhost:44372"
 }

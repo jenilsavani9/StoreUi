@@ -83,3 +83,31 @@ export const StoreLocationService = async () => {
     })
     return response;
 }
+
+/**
+ * updated location routes
+ * @returns city , country and state saperatly
+ */
+export const StoreCountryService = async () => {
+    const response = await axios({
+        method: 'get',
+        url: `/api/store/country`,
+    })
+    return response;
+}
+
+export const StoreStateService = async (id) => {
+    const response = await axios({
+        method: 'get',
+        url: `/api/store/country/${id}/state`,
+    })
+    return response;
+}
+
+export const StoreCityService = async (id) => {
+    const response = await axios({
+        method: 'get',
+        url: `/api/store/state/${id}/city`,
+    })
+    return response;
+}

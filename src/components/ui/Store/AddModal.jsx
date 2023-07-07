@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { CONTEXT_TYPE, TOAST_CONSTANT } from '../../../constants/constant';
 import { MapLinkRegex } from '../../../constants/regex';
 import { useStateValue } from '../../../contexts/StateProvider';
-import { AddStoreService, StoreLocationService } from '../../../services/Store';
+import { AddStoreService, StoreCityService, StoreCountryService, StoreLocationService, StoreStateService } from '../../../services/Store';
 
 function AddModal() {
 
@@ -22,12 +22,12 @@ function AddModal() {
     const CloseRef = useRef();
 
     async function LocationData() {
-        const response = await StoreLocationService();
-        setCityList(response.data.locations.cities)
+        const response = await StoreCountryService();
+        // setCityList(response.data.locations.cities)
         setCountryList(response.data.locations.countries)
-        setStateList(response.data.locations.states)
+        // setStateList(response.data.locations.states)
     }
-    
+
     async function handleAddStoreSubmit(data, e) {
 
         try {
@@ -57,12 +57,16 @@ function AddModal() {
     // for filter city and states
     const [ct, setCt] = useState();
     const [cs, setCs] = useState();
-    const FilterState = (event) => {
-        setCs(event.target.value);
+    const FilterState = async (event) => {
+        // setCs(event.target.value);
+        const response = await StoreStateService(event.target.value);
+        setStateList(response.data.locations.states)
     }
 
-    const FilterCity = (event) => {
-        setCt(event.target.value);
+    const FilterCity = async (event) => {
+        // setCt(event.target.value);
+        const response = await StoreCityService(event.target.value);
+        setCityList(response.data.locations.cities)
     }
 
     return (
@@ -108,12 +112,12 @@ function AddModal() {
                                     <div className="text-danger">{errors.LocationLink?.type === 'required' && <p role="alert">Location Link is required</p>}</div>
                                 </div>
 
-                                <div className="row">
+                                {/* <div className="row">
                                     <div className="col-4">
                                         <label htmlFor="validationCustom06" className="form-label">Country*</label>
                                         <select className="form-control" {...register("Country", { required: true })} onClick={LocationData} onChange={FilterState} id='country-select'>
                                             {!countryList ? <option value={""}>Select Country</option> : countryList.map((item, index) => {
-                                                return (<option value={item.id} key={index}>{item.name}</option>)
+                                                return (<option value={item.Id} key={index}>{item.Name}</option>)
                                             })}
                                         </select>
                                         <div className="text-danger">{errors.Country?.type === 'required' && <p role="alert">Country is required</p>}</div>
@@ -123,7 +127,7 @@ function AddModal() {
                                         <label htmlFor="validationCustom06" className="form-label">State*</label>
                                         <select className="form-control" {...register("State", { required: true })} onChange={FilterCity} onClick={FilterCity}>
                                             {!cs ? "" : stateList.map((item, index) => {
-                                                return (cs == item.countryId ? <option value={item.id} key={index}>{item.name}</option> : "")
+                                                return (cs == item.CountryId ? <option value={item.Id} key={index}>{item.Name}</option> : "")
                                             })}
                                         </select>
                                         <div className="text-danger">{errors.State?.type === 'required' && <p role="alert">State is required</p>}</div>
@@ -133,7 +137,38 @@ function AddModal() {
                                         <label htmlFor="validationCustom06" className="form-label">City*</label>
                                         <select className="form-control" {...register("City", { required: true })}>
                                             {!ct ? "" : cityList.map((item, index) => {
-                                                return (ct == item.stateId ? <option value={item.id} key={index}>{item.name}</option> : "")
+                                                return (ct == item.StateId ? <option value={item.Id} key={index}>{item.Name}</option> : "")
+                                            })}
+                                        </select>
+                                        <div className="text-danger">{errors.City?.type === 'required' && <p role="alert">City is required</p>}</div>
+                                    </div>
+                                </div> */}
+                                <div className="row">
+                                    <div className="col-4">
+                                        <label htmlFor="validationCustom06" className="form-label">Country*</label>
+                                        <select className="form-control" {...register("Country", { required: true })} onClick={LocationData} onChange={FilterState} id='country-select'>
+                                            {!countryList ? <option value={""}>Select Country</option> : countryList.map((item, index) => {
+                                                return (<option value={item.Id} key={index}>{item.Name}</option>)
+                                            })}
+                                        </select>
+                                        <div className="text-danger">{errors.Country?.type === 'required' && <p role="alert">Country is required</p>}</div>
+                                    </div>
+
+                                    <div className="col-4">
+                                        <label htmlFor="validationCustom06" className="form-label">State*</label>
+                                        <select className="form-control" {...register("State", { required: true })} onChange={FilterCity}>
+                                            {!stateList ? <option value={""}>Select State</option> : stateList.map((item, index) => {
+                                                return (<option value={item.Id} key={index}>{item.Name}</option>)
+                                            })}
+                                        </select>
+                                        <div className="text-danger">{errors.State?.type === 'required' && <p role="alert">State is required</p>}</div>
+                                    </div>
+
+                                    <div className="col-4">
+                                        <label htmlFor="validationCustom06" className="form-label">City*</label>
+                                        <select className="form-control" {...register("City", { required: true })} placeholder='select city'>
+                                            {!cityList ? <option value={""}>Select City</option> : cityList.map((item, index) => {
+                                                return (<option value={item.Id} key={index}>{item.Name}</option>)
                                             })}
                                         </select>
                                         <div className="text-danger">{errors.City?.type === 'required' && <p role="alert">City is required</p>}</div>

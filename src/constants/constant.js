@@ -1,4 +1,4 @@
-export const AXIOS_URL = 'https://localhost:44352';
+export const AXIOS_URL = 'http://localhost:44352';
 
 export const CONTEXT_TYPE = {
     SET_USER: "SET_USER",
