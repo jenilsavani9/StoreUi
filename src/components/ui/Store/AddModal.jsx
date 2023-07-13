@@ -6,13 +6,13 @@ import { toast } from 'react-toastify';
 import { CONTEXT_TYPE, TOAST_CONSTANT } from '../../../constants/constant';
 import { MapLinkRegex } from '../../../constants/regex';
 import { useStateValue } from '../../../contexts/StateProvider';
-import { AddStoreService, StoreCityService, StoreCountryService, StoreLocationService, StoreStateService } from '../../../services/Store';
+import { AddStoreService, StoreCityService, StoreCountryService, StoreStateService } from '../../../services/Store';
 
 function AddModal() {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const [{ }, dispatch] = useStateValue();
+    const [ {  }, dispatch] = useStateValue();
 
     //dropdown list
     const [cityList, setCityList] = useState();
@@ -54,9 +54,6 @@ function AddModal() {
         }
     }
 
-    // for filter city and states
-    const [ct, setCt] = useState();
-    const [cs, setCs] = useState();
     const FilterState = async (event) => {
         // setCs(event.target.value);
         const response = await StoreStateService(event.target.value);

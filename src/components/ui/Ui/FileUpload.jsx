@@ -20,8 +20,6 @@ function FileUpload({ }) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const [tempStores, setTempStores] = useState([]);
-
     const [file, setFile] = useState();
 
     const saveFile = (event) => {
@@ -49,6 +47,7 @@ function FileUpload({ }) {
         const formData = new FormData();
         formData.append('FormFile', file);
         formData.append("UserId", UserId)
+        console.log(formData);
         try {
             await CSVUpload(formData);
             handleClose();
