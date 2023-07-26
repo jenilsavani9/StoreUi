@@ -8,45 +8,45 @@ import { LoadFeature } from '../services/Features';
 
 function Services() {
 
-    const [{ features }, dispatch] = useStateValue();
+  const [{ features }, dispatch] = useStateValue();
 
-    async function LoadFeatures() {
-        try {
-            const response = await LoadFeature()
-            dispatch({
-                type: CONTEXT_TYPE.SET_FEATURE,
-                features: response.data.payload
-            })
-        } catch (error) {
+  async function LoadFeatures() {
+    try {
+      const response = await LoadFeature()
+      dispatch({
+        type: CONTEXT_TYPE.SET_FEATURE,
+        features: response.data.payload
+      })
+    } catch (error) {
 
-        }
     }
+  }
 
-    useEffect(() => {
-        LoadFeatures();
-    }, [])
+  useEffect(() => {
+    LoadFeatures();
+  }, [])
 
 
-    return (
-        <div>
-            <div className='container'>
+  return (
+    <div>
+      <div className='container'>
 
-                <div className="d-flex justify-content-between mt-3">
-                    <h2>Features</h2>
-                    <AddModal />
-                </div>
-
-                <div className=''>
-                    <div className="row">
-                        {features.length == 0 ? <div>No features found</div> : features.map((item, index) => {
-                            return <FeatureCard key={index} feature={item} />
-                        })}
-                    </div>
-                </div>
-
-            </div>
+        <div className="d-flex justify-content-between mt-3">
+          <h2>Features</h2>
+          <AddModal />
         </div>
-    )
+
+        <div className=''>
+          <div className="row">
+            {features.length == 0 ? <div>No features found</div> : features.map((item, index) => {
+              return <FeatureCard key={index} feature={item} />
+            })}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  )
 }
 
 export default Services

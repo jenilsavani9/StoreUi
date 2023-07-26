@@ -1,7 +1,6 @@
 {
   "name": "storeui",
   "version": "0.1.0",
-  "homepage": "https://jenilsavani9.github.io/storeui",
   "private": true,
   "type": "module",
   "dependencies": {
@@ -37,7 +36,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!axios)/\" --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

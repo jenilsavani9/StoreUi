@@ -12,11 +12,11 @@ import { StateProvider } from './contexts/StateProvider.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <BrowserRouter>
-        <StateProvider initialState={initialState} reducer={reducer}>
-            <App />
-        </StateProvider>
-    </BrowserRouter>
+  <BrowserRouter>
+    <StateProvider initialState={initialState} reducer={reducer}>
+      <App />
+    </StateProvider>
+  </BrowserRouter>
 );
 
 

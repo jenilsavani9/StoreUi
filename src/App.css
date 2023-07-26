@@ -1,36 +1,36 @@
 .login-form {
-    width: 30%;
-    height: 100vh;
-    margin-top: 130px;
+  width: 30%;
+  height: 100vh;
+  margin-top: 130px;
 }
 
 #login-form-values {
-    border: 1px solid #ced4da;
-    padding: 20px;
+  border: 1px solid #ced4da;
+  padding: 20px;
 }
 
 #user-table-header {
-    border-top: 1px solid #dee2e6;
-    height: 20px;
+  border-top: 1px solid #dee2e6;
+  height: 20px;
 }
 
 #page-not-found-header {
-    font-size: 250px;
+  font-size: 250px;
 }
 
 #user-table {
-    margin-top: 10px;
-    border: 1px solid rgb(222,226,230);
+  margin-top: 10px;
+  border: 1px solid rgb(222, 226, 230);
 }
 
 @media screen and (max-width: 1200px) {
-    .login-form {
-        width: 50%;
-    }
+  .login-form {
+    width: 50%;
+  }
 }
 
 @media screen and (max-width: 768px) {
-    .login-form {
-        width: 70%;
-    }
+  .login-form {
+    width: 70%;
+  }
 }

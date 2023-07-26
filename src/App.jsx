@@ -6,14 +6,14 @@ import RouterConfig from "./routes/RouterConfig.jsx";
 
 function App() {
 
-    axios.defaults.baseURL = AXIOS_URL;
+  axios.defaults.baseURL = AXIOS_URL;
 
-    return (
-        <div className="App">
-            <ToastContainer />
-            <RouterConfig />
-        </div>
-    );
+  return (
+    <div className="App">
+      <ToastContainer />
+      <RouterConfig />
+    </div>
+  );
 }
 
 export default App;

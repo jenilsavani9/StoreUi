@@ -5,12 +5,12 @@ function Spinners() {
   return (
     <Button variant="dark" disabled>
       <Spinner
-          as="span"
-          animation="border"
-          size="sm"
-          role="status"
-          aria-hidden="true"
-        />
+        as="span"
+        animation="border"
+        size="sm"
+        role="status"
+        aria-hidden="true"
+      />
       Loading...
     </Button>
   );

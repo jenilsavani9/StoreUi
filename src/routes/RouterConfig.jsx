@@ -9,34 +9,34 @@ import Users from '../pages/Users';
 import PageNotFound from '../pages/PageNotFound';
 
 function RouterConfig() {
-    return (
-        <div>
-            <Routes>
-                <Route exact path="/login" element={<Login />} />
-                <Route exact path="/verify" element={<EmailValidation />} />
-                <Route exact path="/" element={
-                    <Fragment>
-                        <Navbar />
-                        <Store />
-                    </Fragment>
-                } />
-                <Route exact path="/features" element={
-                    <Fragment>
-                        <Navbar />
-                        <Services />
-                    </Fragment>
-                } />
-                <Route exact path="/Users" element={
-                    <Fragment>
-                        <Navbar />
-                        <Users />
-                    </Fragment>
-                } />
-                <Route path="/404" element={<PageNotFound />} />
-                <Route path="*" element={<Navigate to="/404" />} />
-            </Routes>
-        </div>
-    )
+  return (
+    <div>
+      <Routes>
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/verify" element={<EmailValidation />} />
+        <Route exact path="/" element={
+          <Fragment>
+            <Navbar />
+            <Store />
+          </Fragment>
+        } />
+        <Route exact path="/features" element={
+          <Fragment>
+            <Navbar />
+            <Services />
+          </Fragment>
+        } />
+        <Route exact path="/Users" element={
+          <Fragment>
+            <Navbar />
+            <Users />
+          </Fragment>
+        } />
+        <Route path="/404" element={<PageNotFound />} />
+        <Route path="*" element={<Navigate to="/404" />} />
+      </Routes>
+    </div>
+  )
 }
 
 export default RouterConfig
